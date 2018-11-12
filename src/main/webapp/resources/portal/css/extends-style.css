@@ -1,0 +1,10 @@
+.article-body a {
+	color: #2f63ba;
+}
+
+.newslist a {
+	width: 260px; overflow : hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}

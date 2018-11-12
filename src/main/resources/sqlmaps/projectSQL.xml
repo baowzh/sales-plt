@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xunno.sales.modules.project.model.Project">
+    <resultMap id="projectMap" type="com.xunno.sales.modules.project.model.Project">
+		<result column="id" property="id"  />
+		<result column="name" property="name"  />
+		<result column="depart_Id" property="departId"  />
+		<result column="level" property="level"  />
+		<result column="amount" property="amount"  />
+		<result column="inputDate" property="inputDate"  />
+		<result column="release_time" property="releaseTime"  />
+		<result column="orgId" property="orgId" />
+		<result column="townId" property="townId" />
+		<result column="comm" property="comm"  />
+		<result column="hamletId" property="hamletId"  />
+		<result column="orgName" property="orgName"  />
+		<result column="townName" property="townName"  />
+        <result column="subcat" property="subcat"  />
+        <result column="catName" property="catName"  />
+        <result column="hamletName" property="hamletName"  />
+        <result column="year" property="year"  />
+        <result column="batch" property="batch"  />
+        
+	</resultMap>
+
+	<insert id="insert" parameterType="com.xunno.sales.modules.project.model.Project">
+
+		Insert into
+		td_f_project
+		(
+         name,
+         depart_id,
+         level,
+         amount,
+         release_time,
+         inputDate,
+         orgName,
+         townName,
+         comm,
+         hamletName,
+         year,
+         batch
+		  
+		)
+		values (
+		#{name,jdbcType=VARCHAR},
+		#{departId,jdbcType=VARCHAR},
+		#{level,jdbcType=VARCHAR},
+		#{amount,jdbcType=DOUBLE},
+		#{releaseTime,jdbcType=DATE},
+		#{inputDate,jdbcType=DATE},
+		#{orgName,jdbcType=VARCHAR},
+		#{townName,jdbcType=VARCHAR},
+		#{comm,jdbcType=VARCHAR},
+		#{hamletName,jdbcType=VARCHAR},
+		#{year,jdbcType=VARCHAR},
+		#{batch,jdbcType=VARCHAR}
+
+		)
+
+	</insert>
+	<update id="update" parameterType="com.xunno.sales.modules.project.model.Project">
+		updae td_f_project
+		set id=#{id}
+		<if test="catid!=null">
+			,name=#{name}
+		</if>
+		<if test="departId!=null and departId!=''">
+			,departId=#{departId}
+		</if>
+		<if test="level!=null and level!=''">
+			,level=#{level}
+		</if>
+		<if test="amount!=null">
+			,amount=#{amount}
+		</if>
+		<if test="inputDate!=null">
+			,inputDate=#{inputDate}
+		</if>
+		<if test="releaseTime!=null">
+			,releaseTime=#{releaseTime}
+		</if>
+		<if test="orgName!=null and orgName!=''">
+			,orgName=#{orgName}
+		</if>
+		<if test="townName!=null and townName!=''">
+			,townName=#{townName}
+		</if>
+		<if test="hamletName!=null">
+			,hamletName=#{hamletName}
+		</if>
+		where id=#{id}
+	</update>
+	<delete id="del" parameterType="java.util.Map">
+		delete from td_f_project
+		where depart_Id=#{departId} and  batch=#{batch}
+	</delete>
+	<select id="paging" parameterType="com.xunno.sales.form.ProjectPagingForm" resultMap="projectMap">
+	  select * from td_f_project where depart_id=#{departId}
+	</select>
+	<select id="getBatchIds" parameterType="java.util.Map" resultType="java.lang.String">
+	  select distinct batch from td_f_project where depart_id=#{departId} and year=#{year}
+	</select>
+
+
+</mapper>

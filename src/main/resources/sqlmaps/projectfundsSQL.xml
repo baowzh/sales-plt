@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xunno.sales.modules.projectfunds.model.ProjectFounds">
+
+
+	<insert id="insert" parameterType="com.xunno.sales.modules.projectfunds.model.ProjectFounds">
+
+		Insert into
+		td_f_projectfounds
+		(
+		name,
+		departId,
+		level,
+		amount,
+		inputDate,
+		releaseTime,
+		orgId,
+		townId,
+		hamletId
+		)
+		values (
+		#{name,jdbcType=VARCHAR},
+		#{departId,jdbcType=VARCHAR},
+		#{level,jdbcType=INTEGER}
+		#{amount,jdbcType=DOUBLE}
+		#{inputDate,jdbcType=DATE}
+		#{releaseTime,jdbcType=DATE}
+		#{orgId,jdbcType=VARCHAR}
+		#{townId,jdbcType=VARCHAR}
+		#{hamletId,jdbcType=VARCHAR}
+
+		)
+
+	</insert>
+	<update id="update" parameterType="com.xunno.sales.modules.projectfunds.model.ProjectFounds">
+		updae td_f_projectfounds
+		set id=#{id}
+		<if test="catid!=null">
+			,name=#{name}
+		</if>
+		<if test="departId!=null">
+			,departId=#{departId}
+		</if>
+		<if test="level!=null">
+			,level=#{level}
+		</if>
+		<if test="amount!=null">
+			,amount=#{amount}
+		</if>
+		<if test="inputDate!=null">
+			,inputDate=#{inputDate}
+		</if>
+		<if test="releaseTime!=null">
+			,releaseTime=#{releaseTime}
+		</if>
+		<if test="orgId!=null">
+			,orgId=#{orgId}
+		</if>
+		<if test="townId!=null">
+			,townId=#{townId}
+		</if>
+		<if test="hamletId!=null">
+			,hamletId=#{hamletId}
+		</if>
+		where id=#{id}
+	</update>
+	<delete id="del" parameterType="java.util.Map">
+		delete from td_f_projectfounds
+		where departId=#{departId}
+		<if test="id!=null">
+			id=#{id}
+		</if>
+
+	</delete>
+
+
+</mapper>

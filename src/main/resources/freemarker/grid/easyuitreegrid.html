@@ -1,0 +1,131 @@
+<#import "gridlib.html" as grid>
+
+<table id="dg${gridMeta.id}"  
+ <#if gridMeta.gridCss??> style="${gridMeta.gridCss}" </#if> >
+ <@grid.toolbar meta=gridMeta />
+</table>
+<script type="text/javascript">
+ // 表格全局脚本 
+ <#if gridMeta.extScript??>
+    ${gridMeta.extScript}
+ </#if>
+var grid_${gridMeta.id}_height=function(){
+  <#if gridMeta.height??>
+   if('${gridMeta.height}'=='auto'||'${gridMeta.height}'==''){
+     var realHeight=$( window ).height()-($('#search-form')[0].clientHeight+70);
+      if(window.systemType == 'portal'){
+        realHeight=realHeight-100;
+      }
+      return realHeight;
+   }else{
+      return ${gridMeta.height};
+   }
+   <#else>
+    var realHeight=$( window ).height()-($('#search-form')[0].clientHeight+70);
+      if(window.systemType == 'portal'){
+        realHeight=realHeight-100;
+      }
+      return realHeight;
+  </#if> 
+ }
+ 
+<@grid.columnContextMenu meta=gridMeta />
+var dg${gridMeta.id};
+reportGridIds.push({id:'dg${gridMeta.id}',type:'treeGrid'});
+dg${gridMeta.id}=$('#dg${gridMeta.id}').treegrid({
+    url:'',
+    loadMsg : '数据加载中...',
+    sortOrder : 'asc',
+    singleSelect : true,
+    fit : false,
+    showFooter : true,
+   // lines: true,
+    idField: '${gridMeta.idField}',
+    treeField:'${gridMeta.treefield}',
+    width:'100%',
+    height:grid_${gridMeta.id}_height(),
+    columns: [
+              <@grid.gridheader heads=gridMeta.heads />
+     
+ ]
+ <#if gridMeta.frozenheads??&&gridMeta.frozenheads?size gt 0>
+ 
+ ,frozenColumns: [
+                 <@grid.gridheader heads=gridMeta.frozenheads />
+ ]
+ </#if>
+   <#if gridMeta.hasToolbar>
+    ,toolbar:'#tb'
+    </#if>
+ 
+ ,loadFilter:function(data){
+  return data.rows;
+ }
+  ,onLoadError:function(data){
+    BDialog.alert(data.responseText)
+ }
+ ,autoRowHeight:true
+ ,striped:true
+ ,rownumbers:true
+ ,onHeaderContextMenu:handleColumnMenu_${gridMeta.id}
+ ,onBeforeExpand:function(row){
+   // 修改获取子节点数据的url
+   var allparams=$.extend($(document.forms[0]).serializeJSON(),row);
+   //
+    $("#dg${gridMeta.id}").treegrid("options").url='${gridMeta.subDataSrc}';
+    $("#dg${gridMeta.id}").treegrid("options").queryParams=allparams;
+//     $('#dg${gridMeta.id}').treegrid({
+// 			queryParams: allparams,
+// 			url:'${gridMeta.subDataSrc}'
+// 	});
+	return true;
+ }
+  ,onLoadSuccess : function(data) {
+	  $("#dg${gridMeta.id}").treegrid("clearSelections");
+	   
+	}
+	 
+});
+$.extend($.fn.treegrid.methods, {
+	   refreshdata: function(){
+	     // 给组件添加刷新数据方法 
+	     $("#dg${gridMeta.id}").treegrid("options").url=''; //改回刷新数据用的地址 ;
+	     $('#dg${gridMeta.id}').treegrid().load();
+	   }
+	});
+
+ <@grid.formatter />
+
+ $(document).on('refreshComponent',function(event,param){
+	   $('#dg${gridMeta.id}').treegrid({
+			queryParams: param,
+			url:'${gridMeta.dataSrc}'
+		});
+	   //$("#dg${gridMeta.id}").treegrid("options").url='${gridMeta.dataSrc}';
+      // $('#dg${gridMeta.id}').treegrid("load");
+  });
+ $(function(){	
+ var param=parseQueryString(window.location.href);
+ if(document.forms.length==0){
+    $('#dg${gridMeta.id}').datagrid({
+	        url:'${gridMeta.dataSrc}',
+			queryParams: param,
+			pageNumber:1
+		});
+ }
+
+});
+function parseQueryString(url) {
+ var reg_url = /^[^\?]+\?([\w\W]+)$/,
+  reg_para = /([^&=]+)=([\w\W]*?)(&|$|#)/g,
+  arr_url = reg_url.exec(url),
+  ret = {};
+ if (arr_url && arr_url[1]) {
+  var str_para = arr_url[1], result;
+  while ((result = reg_para.exec(str_para)) != null) {
+   ret[result[1]] = result[2];
+  }
+ }
+ return ret;
+} 
+</script>

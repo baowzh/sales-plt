@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="staffFuncright">
+	<resultMap id="staffFuncrightMap"
+		type="com.xunno.sales.modules.system.model.StaffFuncright">
+		<result column="RIGHT_CODE" property="staffId" jdbcType="VARCHAR" />
+		<result column="RIGHT_NAME" property="rightCode" jdbcType="VARCHAR" />
+		<result column="RIGHT_ATTR" property="rightAttr" jdbcType="CHAR" />
+		<result column="MOD_CODE" property="extendValue1" jdbcType="VARCHAR" />
+		<result column="PARENT_MENU_ID" property="extendValue2" jdbcType="VARCHAR" />
+		<result column="HELP_INDEX" property="rightTag" jdbcType="DECIMAL" />
+		<result column="REMARK" property="rsvalue1" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="rsvalue2" jdbcType="DATE" />
+		<result column="UPDATE_STAFF_ID" property="remark"
+			jdbcType="CHAR" />
+		<result column="UPDATE_DEPART_ID" property="accreditTime"
+			jdbcType="CHAR" />
+		<result column="MENU_TITLE" property="accreditStaffId" jdbcType="DATE" />
+		
+		<result column="DEPART_NAME" property="departId" jdbcType="DATE" />
+
+	</resultMap>
+	<select id="getStaffFuncrights" parameterType="java.util.Map"
+		resultMap="staffFuncrightMap">
+		select t.* from TF_M_STAFFFUNCRIGHT t 
+		
+		<where>
+			<if test="rightAttr != null and rightAttr !=''">
+				and t.RIGHT_ATTR=#{rightAttr}
+			</if>
+			<if test="rightCode != null and rightCode !=''">
+				and t.RIGHT_CODE=#{rightCode}
+			</if>
+			<if test="roleCode != null and roleCode !=''">
+				and t.RIGHT_CODE=#{roleCode}
+			</if>
+			<if test="staffId != null and staffId !=''">
+				and t.STAFF_ID=#{staffId}
+			</if>
+		</where>
+	</select>
+	<delete id="delStaffFuncright"
+		parameterType="com.xunno.sales.modules.system.model.StaffFuncright">
+
+		DELETE FROM TF_M_STAFFFUNCRIGHT t 
+		<where>
+			<if test="rightAttr != null and rightAttr !=''">
+				and t.RIGHT_ATTR=#{rightAttr}
+			</if>
+			<if test="rightCode != null and rightCode !=''">
+				and t.RIGHT_CODE=#{rightCode}
+			</if>
+			<if test="roleCode != null and roleCode !=''">
+				and t.RIGHT_CODE=#{roleCode}
+			</if>
+			<if test="staffId != null and staffId !=''">
+				and t.STAFF_ID=#{staffId}
+			</if>
+		</where>
+
+	</delete>
+</mapper>

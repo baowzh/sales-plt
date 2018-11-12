@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xunno.sales.modules.funds.mdoel.Funds">
+
+	<resultMap id="fundMap" type="com.xunno.sales.modules.funds.mdoel.Funds">
+		<result column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="depart_id" property="departId" />
+		<result column="orgName" property="orgName" />
+		<result column="areaName" property="areaName" />
+		<result column="amount" property="amount" />
+		<result column="input_time" property="InputDate" />
+		<result column="release_time" property="releaseTime" />
+		<result column="comm" property="comm" />
+		<result column="year" property="year" />
+		<result column="batch" property="batch" />
+	</resultMap>
+	<insert id="insert" parameterType="com.xunno.sales.modules.funds.mdoel.Funds">
+
+		Insert into
+		td_f_funds
+		(
+		name,
+		depart_id,
+		orgName,
+		areaName,
+		amount,
+		release_time,
+		input_time,
+		comm,
+		year,
+		batch
+
+
+		)
+		values (
+		#{name,jdbcType=VARCHAR},
+		#{departId,jdbcType=VARCHAR},
+		#{orgName,jdbcType=VARCHAR},
+		#{areaName,jdbcType=VARCHAR},
+		#{amount,jdbcType=DOUBLE},
+		#{releaseTime,jdbcType=DATE},
+		#{inputDate,jdbcType=DATE},
+		#{comm,jdbcType=VARCHAR},
+		#{year,jdbcType=VARCHAR},
+		#{batch,jdbcType=VARCHAR}
+
+		)
+
+	</insert>
+	<update id="update" parameterType="com.xunno.sales.modules.funds.mdoel.Funds">
+		updae td_f_funds
+		set id=#{id}
+		<if test="catid!=null">
+			,name=#{name}
+		</if>
+		<if test="departId!=null">
+			,departId=#{departId}
+		</if>
+		<if test="orgName!=null">
+			,orgName=#{orgName}
+		</if>
+		<if test="amount!=null">
+			,amount=#{amount}
+		</if>
+		<if test="inputDate!=null">
+			,inputDate=#{inputDate}
+		</if>
+		<if test="releaseTime!=null">
+			,releaseTime=#{releaseTime}
+		</if>
+		<if test="comm!=null and comm!=''">
+			,comm=#{comm}
+		</if>
+		where id=#{id}
+	</update>
+	<delete id="del" parameterType="java.util.Map">
+		delete from td_f_funds
+		where
+		depart_Id=#{departId} and batch=#{batch}
+
+	</delete>
+
+	<select id="paging" parameterType="com.xunno.sales.form.FoundsPagingForm"
+		resultMap="fundMap">
+		select * from td_f_funds where depart_id=#{departId}
+	</select>
+	<select id="getBatchIds" parameterType="java.util.Map"
+		resultType="java.lang.String">
+		select distinct batch from td_f_funds where depart_id=#{departId} and
+		year=#{year}
+	</select>
+
+
+</mapper>

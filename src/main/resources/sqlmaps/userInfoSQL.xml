@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="user">
+
+	<resultMap id="userInfoMap" type="com.xunno.sales.modules.system.model.User">
+		<result column="STAFF_ID" property="staffid" jdbcType="CHAR" />
+		<result column="STAFF_PASSWD" property="staffpasswd" jdbcType="VARCHAR" />
+		<result column="STAFF_NAME" property="staffname" jdbcType="CHAR" />
+		<result column="DEPART_ID" property="departid" jdbcType="VARCHAR" />
+		<result column="JOB_CODE" property="jobCode" jdbcType="VARCHAR" />
+		<result column="MANAGER_INFO" property="managerInfo" jdbcType="VARCHAR" />
+		<result column="SEX" property="sex" jdbcType="CHAR" />
+
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="USER_PID" property="userPid" jdbcType="VARCHAR" />
+		<result column="SERIAL_NUMBER" property="serialNumber"
+			jdbcType="VARCHAR" />
+		<result column="CUST_ID" property="custId" jdbcType="DECIMAL" />
+		<result column="DIMISSION_TAG" property="dimissionTag"
+			jdbcType="CHAR" />
+		<result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+		<result column="STAFF_GROUP_ID" property="staffGroupId"
+			jdbcType="DECIMAL" />
+		<result column="CUST_HOBYY" property="custHobyy" jdbcType="VARCHAR" />
+		<result column="MANAGER_STAFF_ID" property="managerStaffId"
+			jdbcType="CHAR" />
+		<result column="RECEIVE_TYPE_CODE" property="receiveTypeCode"
+			jdbcType="CHAR" />
+		<result column="LOGIN_FLAG" property="loginFlag" jdbcType="CHAR" />
+		<result column="CUST_MANAGER_FLAG" property="custManagerFlag"
+			jdbcType="CHAR" />
+		<result column="CITY_CODE" property="cityCode" jdbcType="CHAR" />
+		<result column="EPARCHY_CODE" property="areacode" jdbcType="CHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="RSVALUE1" property="rsvalue1" jdbcType="VARCHAR" />
+		<result column="RSVALUE2" property="rsvalue2" jdbcType="VARCHAR" />
+		<result column="START_DATE" property="startDate" jdbcType="DATE" />
+		<result column="END_DATE" property="endDate" jdbcType="DATE" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+		<result column="UPDATE_STAFF_ID" property="updateStaffId"
+			jdbcType="CHAR" />
+		<result column="UPDATE_DEPART_ID" property="updateDepartId"
+			jdbcType="CHAR" />
+		<result column="RSRV_TAG1" property="rsrvTag1" jdbcType="CHAR" />
+		<result column="DEPART_NAME" property="departName" jdbcType="VARCHAR" />
+		<result column="AREA_NAME" property="cityName" jdbcType="VARCHAR" />
+		<result column="UPDATE_DEPART_NAME" property="updateDepartName" jdbcType="VARCHAR" />
+		
+
+	</resultMap>
+
+	<select id="oneUserInfo" resultType="com.asiainfo.eframe.security.model.UserInfo"
+		parameterType="java.util.Map">
+
+
+		SELECT A.STAFF_ID STAFFID,
+		B.STAFF_PASSWD STAFFPASSWD,
+		A.STAFF_NAME
+		STAFFNAME,
+		A.DEPART_ID DEPARTID,
+		C.DEPART_NAME DEPARTNAME,
+
+		A.EPARCHY_CODE EPARCHYCODE
+		FROM TD_M_STAFF A , TF_M_STAFFPASSWD B,TD_M_DEPART C
+		where A.STAFF_ID = B.STAFF_ID and  A.DEPART_ID = C.DEPART_ID
+		
+		<if test="username != null and username !=''">
+			AND A.STAFF_ID = #{username}
+		</if>
+
+	</select>
+
+
+	<select id="oneUser" resultMap="userInfoMap" parameterType="java.util.Map">
+
+
+		SELECT A.* ,
+		B.STAFF_PASSWD ,
+		C.DEPART_NAME
+		FROM TD_M_STAFF A
+		,
+		TF_M_STAFFPASSWD B ,
+		TD_M_DEPART C where
+		A.DEPART_ID = C.DEPART_ID
+		and
+		A.STAFF_ID = B.STAFF_ID
+		<if test="staffid != null and staffid !=''">
+			AND A.STAFF_ID = #{staffid}
+		</if>
+
+	</select>
+
+
+	<select id="getUsers" resultMap="userInfoMap"
+		parameterType="com.xunno.sales.modules.system.model.User">
+		SELECT A.* ,
+		C.DEPART_NAME
+		FROM TD_M_STAFF A,
+		TF_M_STAFFPASSWD B ,
+		TD_M_DEPART C  where
+		A.DEPART_ID = C.DEPART_ID
+		and A.STAFF_ID = B.STAFF_ID
+		<if test="staffname != null and staffname !=''">
+			AND A.STAFF_NAME Like  concat('%',#{staffname},'%') 
+		</if>
+	</select>
+
+	<select id="pagingQueryUser" resultMap="userInfoMap"
+		parameterType="com.xunno.sales.view.modules.system.bean.UserDBPagingPrams">
+		SELECT A.* ,
+		B.STAFF_PASSWD,
+		C.DEPART_NAME
+		FROM TD_M_STAFF A,
+		TF_M_STAFFPASSWD B ,
+		TD_M_DEPART C   
+		 where
+		A.DEPART_ID = C.DEPART_ID and
+		A.STAFF_ID = B.STAFF_ID 
+		<if test="staffname != null and staffname !=''">
+			AND A.STAFF_NAME Like concat('%',#{staffname},'%')
+		</if>
+
+	</select>
+
+	<select id="getUserByStaffid" resultMap="userInfoMap"
+		parameterType="java.lang.String">
+		<!-- SELECT A.STAFF_ID STAFFID, B.STAFF_PASSWD STAFFPASSWD, A.STAFF_NAME 
+			STAFFNAME, A.DEPART_ID DEPARTID, C.DEPART_NAME , E.AREA_CODE AREACODE, E.AREA_NAME 
+			AREANAME, A.EPARCHY_CODE EPARCHYCODE FROM TD_M_STAFF A INNER JOIN TF_M_STAFFPASSWD 
+			B ON A.STAFF_ID = B.STAFF_ID INNER JOIN TD_M_DEPART C ON A.DEPART_ID = C.DEPART_ID 
+			INNER JOIN TD_M_AREA E ON E.AREA_CODE = A.CITY_CODE WHERE 1=1 <if test="username 
+			!= null and username !=''"> AND A.STAFF_ID = #{username} </if> -->
+
+		SELECT A.* ,
+		B.STAFF_PASSWD,
+		C.DEPART_NAME
+		FROM TD_M_STAFF A
+		,
+		TF_M_STAFFPASSWD B ,
+		TD_M_DEPART C where
+		A.DEPART_ID = C.DEPART_ID
+		and
+		A.STAFF_ID = B.STAFF_ID
+		<if test="_parameter != null and _parameter !=''">
+			AND A.STAFF_ID = #{_parameter}
+		</if>
+
+	</select>
+
+
+	<select id="getUserByName" resultType="com.asiainfo.eframe.security.model.UserInfo"
+		parameterType="java.lang.String">
+		<!-- SELECT A.STAFF_ID STAFFID, B.STAFF_PASSWD STAFFPASSWD, A.STAFF_NAME 
+			STAFFNAME, A.DEPART_ID DEPARTID, C.DEPART_NAME DEPARTNAME, E.AREA_CODE AREACODE, 
+			E.AREA_NAME AREANAME, A.EPARCHY_CODE EPARCHYCODE FROM TD_M_STAFF A INNER 
+			JOIN TF_M_STAFFPASSWD B ON A.STAFF_ID = B.STAFF_ID INNER JOIN TD_M_DEPART 
+			C ON A.DEPART_ID = C.DEPART_ID INNER JOIN TD_M_AREA E ON E.AREA_CODE = A.CITY_CODE 
+			WHERE 1=1 <if test="username != null and username !=''"> AND A.STAFF_ID = 
+			#{username} </if> -->
+
+		SELECT A.STAFF_ID STAFFID,
+		B.STAFF_PASSWD STAFFPASSWD,
+		A.STAFF_NAME
+		STAFFNAME,
+		A.DEPART_ID DEPARTID,
+		C.DEPART_NAME DEPARTNAME,
+
+		A.EPARCHY_CODE EPARCHYCODE,
+		a.city_code as AREACODE
+		FROM TD_M_STAFF A
+		,
+		TF_M_STAFFPASSWD B ,
+		TD_M_DEPART C where
+		A.DEPART_ID = C.DEPART_ID
+		and
+		A.STAFF_ID = B.STAFF_ID
+		<if test="_parameter != null and _parameter !=''">
+			AND A.STAFF_ID = #{_parameter}
+		</if>
+
+	</select>
+
+	<select id="getDepartApproveStaff" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		SELECT B.STAFF_ID
+		FROM TF_H_APPROVE_STAFF B
+		INNER JOIN TD_M_STAFF T
+		ON
+		B.STAFF_ID = T.STAFF_ID
+		AND B.DEPART_ID = T.DEPART_ID
+		INNER JOIN
+		TD_M_STAFF T1
+		ON T.DEPART_ID = T1.DEPART_ID
+		WHERE 1 = 1
+		<if test="username != null and username !=''">
+			AND T1.STAFF_ID = #{username}
+		</if>
+		<if test="approvestafftype != null and approvestafftype !=''">
+			AND B.APPROVE_STAFF_TYPE = #{approvestafftype}
+		</if>
+	</select>
+	<select id="getDepartKindApproveStaff" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		SELECT B.STAFF_ID
+		FROM TF_H_APPROVE_STAFF B
+		INNER JOIN TD_M_STAFF T
+		ON
+		B.EPARCHY_CODE = T.EPARCHY_CODE
+		INNER JOIN TD_M_DEPART C
+		ON T.DEPART_ID
+		= C.DEPART_ID
+		WHERE 1 = 1
+		<if test="username != null and username !=''">
+			AND T.STAFF_ID = #{username}
+		</if>
+		<if test="approvestafftype != null and approvestafftype !=''">
+			AND B.APPROVE_STAFF_TYPE = #{approvestafftype}
+		</if>
+		AND B.ORGANIZATION_TYPE LIKE '%' || C.DEPART_KIND_CODE || '%'
+	</select>
+	<select id="getAreaApproveStaff" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		SELECT B.STAFF_ID
+		FROM TF_H_APPROVE_STAFF B
+		INNER JOIN TD_M_STAFF T
+		ON
+		B.AREA_CODE = T.CITY_CODE
+		WHERE 1 = 1
+		<if test="username != null and username !=''">
+			AND T.STAFF_ID = #{username}
+		</if>
+		<if test="approvestafftype != null and approvestafftype !=''">
+			AND B.APPROVE_STAFF_TYPE = #{approvestafftype}
+		</if>
+	</select>
+	<select id="getFinanceApproveStaff" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		SELECT B.STAFF_ID
+		FROM TF_H_APPROVE_STAFF B
+		INNER JOIN TD_M_STAFF T
+		ON
+		B.EPARCHY_CODE = T.EPARCHY_CODE
+		WHERE 1 = 1
+		<if test="username != null and username !=''">
+			AND T.STAFF_ID = #{username}
+		</if>
+		<if test="approvestafftype != null and approvestafftype !=''">
+			AND B.APPROVE_STAFF_TYPE = #{approvestafftype}
+		</if>
+	</select>
+	<!-- <select id="oneUserInfo" resultType="com.asiainfo.framework.entity.UserInfo" 
+		parameterType="java.util.Map"> SELECT A.STAFF_ID STAFFID, B.STAFF_PASSWD 
+		STAFFPASSWD, A.STAFF_NAME STAFFNAME, A.DEPART_ID DEPARTID, C.DEPART_NAME 
+		DEPARTNAME, A.EPARCHY_CODE EPARCHYCODE FROM TD_M_STAFF A INNER JOIN TF_M_STAFFPASSWD 
+		B ON A.STAFF_ID = B.STAFF_ID INNER JOIN TD_M_DEPART C ON A.DEPART_ID = C.DEPART_ID 
+		WHERE 1=1 <if test="username != null and username !=''"> AND A.STAFF_ID = 
+		#{username} </if> </select> -->
+
+	<select id="selectSameNameStaffid" resultType="String"
+		parameterType="map">
+		select staff_id from td_m_staff where STAFF_NAME=#{staffName}
+		<if test="eparchyCode !=null">
+			and eparchy_code = #{eparchyCode}
+		</if>
+		<if test="cityCode !=null">
+			and city_code = #{cityCode}
+		</if>
+	</select>
+	<select id="getUserName" resultType="String" parameterType="java.util.Map">
+		select * from td_m_staff where td_m_staff.STAFF_id='SUPERUSR'
+	</select>
+	<update id="updatePasswordById" parameterType="com.xunno.sales.modules.system.model.User">
+	  update tf_m_staffpasswd set staff_passwd=#{staffpasswd} where staff_id=#{staffid}
+	</update>
+
+
+</mapper>

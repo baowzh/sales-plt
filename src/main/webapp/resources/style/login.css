@@ -1,0 +1,134 @@
+@charset "utf-8";
+/* CSS Document */
+/* reset */
+body{font:12px/18px "微软雅黑",arial,sans-serif;color:#585858;}
+
+body,div,p,span,form,iframe,table,td,th,input,textarea,button,label,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0; border:0;}
+
+body { background:url(../images/login/loginbg.jpg) no-repeat top center #f1f1f1;}
+
+.left_tria { position:absolute; left:0; bottom:0; z-index:-100;}
+.right_tria { position:absolute; right:0; top:90px; z-index:-99;}
+
+.login_div { width:1000px; margin:0 auto;}
+
+.login_title { width:100%; float:left; margin:20px 0 0 0; vertical-align:middle;}
+.login_title img { margin:0; vertical-align:middle; float:left;}
+.login_title div { margin:45px 0 0 10px ; font:normal 36px "黑体"; float:left;}
+
+.login_content { width:100%; float:left; margin:20px 0 0 0; vertical-align:middle;}
+
+.login_form { cursor:pointer; display:inline-block;position:relative;margin:0;width:275px;height:260px;line-height:34px;font-size:14px; color:#fff; vertical-align:middle;border-radius:3px;-o-border-radius:3px;-ms-border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;background-clip:padding-box;background-clip:border-box; background:#3e3e3e; float:right; margin:50px 100px 0 0; padding:20px;}
+
+
+.flexslider {
+	margin: -40px 0 0 40px;
+	position: relative;
+	width: 450px;
+	height: 500px;
+	overflow: hidden;
+	zoom: 1;
+	float:left;
+}
+
+.flexslider .slides li {
+	width: 100%;
+	height: 100%;
+}
+
+
+
+.flex-control-nav {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	text-align: left;
+}
+
+.flex-control-nav li {
+	margin: 0 2px;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+
+.flex-control-paging li a {
+	background: url(../images/login/dot.png) no-repeat 0 -16px;
+	display: block;
+	height: 16px;
+	overflow: hidden;
+	text-indent: -99em;
+	width: 16px;
+	cursor: pointer;
+}
+
+.flex-control-paging li a.flex-active,
+.flex-control-paging li.active a {
+	background-position: 0 0;
+}
+
+.flexslider .slides a img {
+	width: 100%;
+	height: 482px;
+	display: block;
+}
+
+.copyright { float:right; margin:80px 100px 0 0;}
+
+.login_label { font-size:18px; margin:0 0 10px 0;}
+
+.input_user { background:url(../images/login/user_ico.png) no-repeat 95% 50% #fff; width:265px; border:1px solid #cccccc; height:32px;  margin:0 0 10px 0; padding:0 0 0 8px; *line-height:32px;}
+.input_password { background:url(../images/login/password_ico.png) no-repeat 95% 50% #fff; width:265px; border:1px solid #cccccc;  height:32px; margin:0 0 10px 0; padding:0 0 0 8px; *line-height:32px;}
+
+
+.red_btn { cursor:pointer; display:inline-block;position:relative;margin:0;width:275px;height:42px;line-height:42px;font-size:18px; color:#fff; vertical-align:middle;border-radius:3px;-o-border-radius:3px;-ms-border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;background-clip:padding-box;background-clip:border-box; background:#d02c07; text-align:center; border:1px solid #ae2708;}
+.red_btn:hover { background:#ff4b02;}
+
+.check_margin { margin:-10px 0 10px 0;}
+
+.select * {
+  margin: 0;
+  padding: 0;
+}
+.select {
+  border:1px solid #cccccc;
+  float: left;
+  display: inline;
+  }
+.select div {
+  border:0px solid #999;
+  float: left;
+  background:#fff;  
+  *padding-top:7px;
+}
+/* 子选择器，在FF等非IE浏览器中识别 */
+.select>div {
+  width:273px;
+  height: 30px;
+  *height:23px;
+  overflow:hidden;
+  }
+ 
+/* 通配选择符，只在IE浏览器中识别 */
+* html .select div select {
+  display:block;
+  float: left;
+  margin: -2px;
+  *height:23px;
+}
+.select div>select {
+  display:block;
+  width:277px;
+  height:33px;
+  float:none;
+  margin: -2px;
+  padding: 0px;
+  *height:23px;
+  
+}
+.select:hover {
+  border:1px solid #999; //鼠标移上的效果
+}
+.select select>option {
+  text-indent: 2px; //option在FF等非IE浏览器缩进2px
+}

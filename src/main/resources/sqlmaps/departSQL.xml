@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xunno.sales.modules.depart.model.Depart">
+	<resultMap id="depart" type="com.xunno.sales.modules.depart.model.Depart">
+		<result column="depart_id" property="id"  />
+		<result column="depart_code" property="code"  />
+		<result column="depart_name" property="name"  />
+		<result column="parent_depart_id" property="parentId"  />
+		<result column="depart_level" property="level"  />
+		<result column="img" property="img"  />
+		<result column="type" property="type"  />
+		<result column="alias" property="alias"  />
+		
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="com.xunno.sales.modules.depart.model.Depart">
+
+		Insert into
+		td_m_depart
+		(
+		  depart_id,
+		  depart_name,
+		  parent_depart_id,
+		  depart_level,
+		  img,
+		  type,
+		  alias
+		)
+		values (
+		  #{id,jdbcType=CHAR},
+          #{name,jdbcType=VARCHAR},
+          #{parentId,jdbcType=CHAR} ,
+          #{level ,jdbcType=INTEGER},
+          #{img,jdbcType=VARCHAR} ,
+	  	  #{type ,jdbcType=INTEGER},
+	  	  #{alias,jdbcType=VARCHAR} 
+	  	  
+		)
+
+	</insert>
+	<update id="update" parameterType="com.xunno.sales.modules.depart.model.Depart">
+	 update td_m_depart 
+	 set depart_id=#{id}
+	   <if test="code!=null and code!=''">
+	    ,depart_code=#{code}
+	   </if>
+	   <if test="name!=null and name!=''">
+	    ,depart_name=#{name}
+	   </if>
+	   <if test="parentId!=null and parentId!=''">
+	    ,parent_depart_id=#{parentId}
+	   </if>
+	   <if test="level!=null ">
+	    ,depart_level=#{level}
+	   </if>
+	   <if test="img!=null and img!=''">
+	    ,img=#{img}
+	   </if>
+	    <if test="alias!=null and alias!=''">
+	    ,alias=#{alias}
+	   </if>
+	   
+	  where depart_id=#{id}
+	</update>
+	<delete id="del"  parameterType="java.lang.String">
+	 delete from td_m_depart where depart_id=#{id}
+	</delete>
+	<select id="list"  parameterType="java.lang.String" resultMap="depart">
+	  select * from td_m_depart where visible=1 
+	   <if test="_parameter!=null and _parameter!=''">
+	     and parent_depart_id=#{_parameter}
+	   </if>
+	  
+	</select>
+	
+	<select id="getDeparts"  parameterType="java.lang.Integer" resultMap="depart">
+	  select * from td_m_depart where visible=1  and type=#{_parameter} order by show_order
+	</select>
+	
+	<select id="get"  parameterType="java.lang.String" resultMap="depart">
+	  select * from td_m_depart where depart_id=#{_parameter}
+	</select>
+	<select id="childCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+	  select count(1) from  td_m_depart where parent_depart_id=#{_parameter}
+	</select>
+	
+	
+
+	
+</mapper>

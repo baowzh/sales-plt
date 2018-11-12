@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="modFile">
+	<resultMap id="modFileMap"
+		type="com.xunno.sales.modules.system.model.ModFile">
+		<result column="MOD_CODE" property="modCode" jdbcType="VARCHAR" />
+		<result column="MOD_NAME" property="modName" jdbcType="VARCHAR" />
+		<result column="MOD_TYPE" property="modType" jdbcType="CHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+		<result column="UPDATE_STAFF_ID" property="updateStaffId"
+			jdbcType="CHAR" />
+		<result column="UPDATE_DEPART_ID" property="updateDepartId"
+			jdbcType="CHAR" />
+		<result column="TARGER_SHOW" property="targerShow" jdbcType="CHAR" />
+		<result column="TARGET_CODE" property="targetCode" jdbcType="VARCHAR" />
+		<result column="MENU_NAME" property="menuName" jdbcType="VARCHAR" />
+		<result column="PARENT_MOD_CODE" property="parentModCode"
+			jdbcType="VARCHAR" />
+		<result column="IMG_CODE" property="imgCode" jdbcType="VARCHAR" />
+		<result column="BUILDER" property="builder" jdbcType="VARCHAR" />
+		<result column="CRATE_TIME" property="crateTime" jdbcType="DATE" />
+		<result column="BUILDER_PART" property="builderPart" jdbcType="VARCHAR" />
+		<result column="STATE" property="state" jdbcType="CHAR" />
+		<result column="IMG_URL" property="imgUrl" jdbcType="VARCHAR" />
+
+	</resultMap>
+	<select id="oneModFile" parameterType="java.lang.String"
+		resultMap="modFileMap">
+		select * from TD_S_MODFILE t where t.MOD_CODE =
+		#{modCode}
+	</select>
+	<select id="getModFiles" parameterType="java.util.Map"
+		resultMap="modFileMap">
+		select * from TD_S_MODFILE t
+
+		<where>
+			<if test="modCode != null and modCode !=''">
+				and t.MOD_CODE=#{modCode}
+			</if>
+		</where>
+
+	</select>
+	<insert id="insertModFile" parameterType="com.xunno.sales.modules.system.model.ModFile">
+
+		Insert into
+		TD_S_MODFILE
+		(MOD_CODE,MOD_NAME,MOD_TYPE,REMARK,UPDATE_TIME,UPDATE_STAFF_ID,UPDATE_DEPART_ID,TARGER_SHOW,TARGET_CODE,MENU_NAME,PARENT_MOD_CODE,IMG_CODE,BUILDER,CRATE_TIME,BUILDER_PART,STATE,IMG_URL)
+		values (
+		#{modCode,jdbcType=VARCHAR},
+		#{modName,jdbcType=VARCHAR},
+		#{modType,jdbcType=CHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=DATE},
+		#{updateStaffId,jdbcType=CHAR},
+		#{updateDepartId,jdbcType=CHAR},
+		#{targerShow,jdbcType=CHAR},
+		#{targetCode,jdbcType=VARCHAR},
+		#{menuName,jdbcType=VARCHAR},
+		#{parentModCode,jdbcType=VARCHAR},
+		#{imgCode,jdbcType=VARCHAR},
+		#{builder,jdbcType=VARCHAR},
+		#{crateTime,jdbcType=DATE},
+		#{builderPart,jdbcType=VARCHAR},
+		#{state,jdbcType=CHAR},
+		#{imgUrl,jdbcType=VARCHAR})
+
+	</insert>
+	<update id="updateModFile" parameterType="com.xunno.sales.modules.system.model.ModFile">
+
+		update
+		TD_S_MODFILE set
+		MOD_NAME = #{modName,jdbcType=VARCHAR},
+		MOD_TYPE =
+		#{modType,jdbcType=CHAR},
+		REMARK =
+		#{remark,jdbcType=VARCHAR},
+		UPDATE_TIME =
+		#{updateTime,jdbcType=DATE},
+		UPDATE_STAFF_ID =
+		#{updateStaffId,jdbcType=CHAR},
+		UPDATE_DEPART_ID =
+		#{updateDepartId,jdbcType=CHAR},
+		TARGER_SHOW =
+		#{targerShow,jdbcType=CHAR},
+		TARGET_CODE =
+		#{targetCode,jdbcType=VARCHAR},
+		MENU_NAME =
+		#{menuName,jdbcType=VARCHAR},
+		PARENT_MOD_CODE =
+		#{parentModCode,jdbcType=VARCHAR},
+		IMG_CODE =
+		#{imgCode,jdbcType=VARCHAR},
+		BUILDER =
+		#{builder,jdbcType=VARCHAR},
+		CRATE_TIME = #{crateTime,jdbcType=DATE},
+		BUILDER_PART =
+		#{builderPart,jdbcType=VARCHAR},
+		STATE =
+		#{state,jdbcType=CHAR},
+		IMG_URL
+		= #{imgUrl,jdbcType=VARCHAR}
+		where MOD_CODE = #{modCode}
+
+	</update>
+	<delete id="delModFile" parameterType="com.xunno.sales.modules.system.model.ModFile">
+
+		DELETE FROM
+		TD_S_MODFILE where MOD_CODE = #{modCode}
+
+	</delete>
+</mapper>

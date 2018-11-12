@@ -1,0 +1,75 @@
+.combobox_box {
+	cursor: default; text-align: left; z-index:1000;
+}
+.combobox_head {
+	border: #7F9DB9 1px solid;
+	cursor: default;
+}
+.combobox_head label {
+	color: #000000;
+}
+.combobox_head_disabled {
+	border: #C9C7BA 1px solid;
+	cursor: default;
+}
+.combobox_head_disabled label {
+	color: #ACA899;
+}
+.combobox_head table {
+	width: 100%; height: 100%; border: 0; border-collapse: collapse;
+}
+.combobox_text {
+	padding-top:-2px; padding-right:0px; padding-bottom:-2px; padding-left:0px;
+	background: #fff; 
+	inline-height: 100%; width: 100%; overflow: hidden;
+}
+.combobox_arrow {
+	margin-right: 0px;
+}
+.combobox_value {
+	border: 1px solid; visibility: hidden; 
+	overflow-x: hidden; overflow: auto;
+	position: absolute; height: 0px;
+}
+.combobox_value table {
+	width: 100%; height: 100%; border: none; border-collapse:collapse; font-size:12px;
+}
+.combobox_value table thead {
+	height:18px;
+	background-color: #FFFFFF;
+	background-image: url(../../component/images/tabtibj.jpg);
+}
+.combobox_value table thead th {
+	padding-top:0px; padding-right:2px; padding-bottom:0px; padding-left:2px;
+	font-weight: lighter;
+	white-space: nowrap;
+	border: 1px solid #A5A6AD;
+	cursor: default;
+}
+.combobox_value table tr.box_item_normal {
+	background-color: #FFFFFF;
+}
+.combobox_value table tr.box_item_active {
+	background-color: #C1D2EE;
+	cursor: default;
+}
+.combobox_value table tr td {
+	width: auto;
+	white-space: nowrap;
+	padding-top:1px; padding-right:2px; padding-bottom:1px; padding-left:4px;
+	border: 1px solid #D8D8DD;
+}
+.combobox_record0 {
+	border-top: #eee 1px solid; padding-left: 2px; background: #fff; 
+	width: 100%; color: #000; height: 20px;
+}
+.combobox_record1 {
+	border-top: #047 1px solid; padding-left: 2px; background: #058; 
+	width: 100%; color: #fe0; height: 20px
+}
+div.combobox_一行数据{
+	width: 93%;
+}
+div.combobox_输入框长度_标准{
+	width: 81%;
+}

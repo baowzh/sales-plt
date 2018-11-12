@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xunno.sales.modules.category.model.Category">
+	
+	<select id="getCategorys" parameterType="java.util.Map" resultType="com.xunno.sales.modules.category.model.Category">
+	   select id,name,parent_id as parentId,varName,clasz from td_category where  parent_id is null and clasz=#{group} 
+	</select>
+	
+	<select id="getSubCategorys"  parameterType="java.util.Map" resultType="com.xunno.sales.modules.category.model.Category">
+	   select id,name,parent_id as parentId ,varName,clasz  from td_category where  parent_id =#{id,jdbcType=INTEGER} and  clasz=#{group} 
+	</select>
+	<select id="get"  parameterType="java.lang.Integer" resultType="com.xunno.sales.modules.category.model.Category">
+	  select id,name,parent_id as parentId,varName,clasz from td_category where  id=#{_parameter}
+	</select>
+</mapper>

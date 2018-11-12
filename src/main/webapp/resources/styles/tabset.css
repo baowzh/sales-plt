@@ -1,0 +1,110 @@
+/*---tabset---*/
+/** 蓝色风格(半圆角） */
+.Tabset_blue {
+	font-family:arial,helvetica,sans-serif;
+	font-size: 12px;
+	white-space:	nowrap;
+	color:				rgb(0,66,174);
+	width:66px;
+	height: 23px;
+	background-image: url(../../component/images/blabel2.gif);
+	line-height: 25px;
+	overflow: hidden;
+	text-align: center;
+}
+.TabsetTabs_blue {
+	width:			100%;
+	background-repeat: repeat-x;
+}
+.TabsetActive_blue {
+	background-image: url(../../component/images/tabset2.gif);
+	background-repeat: repeat-x;
+	background-color: #FFFFFF;
+	float: left;
+}
+.TabsetInactive_blue {
+	cursor:pointer;
+	background-image: url(../../component/images/tabset1.gif);
+	background-repeat: no-repeat;
+	float: left;
+}
+.tabsetTabsDiv_blue {
+	height:23px;
+	border-bottom: 2px solid #31517B;
+}
+
+/** 二级（长条蓝色风格)*/
+.Tabset_two {
+	font-family:arial,helvetica,sans-serif;
+	font-size: 12px;
+	white-space: nowrap;
+	position: relative;
+	color: #000000;
+}
+.TabsetTabs_two {
+	width:			100%;
+	height:22px;
+	position:	relative;
+	background-color: #C6CFFF;
+	border: 1px solid #7F9DB9;
+	background-image: url(../../component/images/tabset_b_2.gif);
+	background-repeat: repeat-x;
+}
+.TabsetActive_two {
+	height:			16px;
+	background-color: #ffffff;
+	border-right: 1px solid #878787;
+	height:22px;
+	line-height:22px;
+	overflow:hidden;
+	text-align: center;
+	padding-top:6px; padding-right:10px; padding-bottom:3px; padding-left:10px;
+	position:	relative;
+	top:1px;
+	font-weight: bold;
+}
+.TabsetInactive_two {
+	cursor: pointer;
+	height:22px;
+	line-height:22px;
+	overflow:hidden;
+	border-right: 1px solid #1440cc;
+	text-align: center;
+	padding-top:5px; padding-right:10px; padding-bottom:3px; padding-left:10px;
+}
+.tabsetTabsDiv_two {
+}
+
+/** 公用样式 */
+.tabsetContentDiv {
+	width:100%;
+}
+
+/*****更多******/
+
+.tabgo { 
+	margin:4px 0px 0px 0px;
+	padding-top:3px; padding-right:-2px; padding-bottom:2px; padding-left:-2px;
+}
+.tabgo:link,.tabgo:visited{
+	text-decoration: none;
+}
+.tabgo:hover{color: #FF0000;text-decoration:none;	 background-color:#fff; border:#006699 solid 1px;
+}
+.tabsetmenu {
+	position:	absolute;
+	width:		140px;
+	border:		1px Solid WindowFrame;
+	background:	#ffffff;
+	padding:	1px;
+	filter:		progid:DXImageTransform.Microsoft.Shadow(color="#C9C9AE", Direction=135, Strength=3);
+	z-index:	10000;
+}
+.tabsetmenu a{
+	display:block;
+	width:100%;
+	padding-top:1px; padding-right:5px; padding-bottom:1px; padding-left:5px;
+	text-decoration: none;
+	margin:1px;
+}
+.tabsetmenu a:hover{ background-color:#316AC5; color:#FFFFFF}

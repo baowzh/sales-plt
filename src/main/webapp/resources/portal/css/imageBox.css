@@ -1,0 +1,90 @@
+.imgbox {
+    width: 324px;
+    height: 260px;
+    border: 2px solid #f0f0f0;
+    margin: 10px;
+    float: left;
+}
+
+.FocusPic {
+	zoom: 1;
+	position: relative;
+	overflow: hidden;
+}
+
+.FocusPic .content {
+	overflow: hidden;
+}
+
+.FocusPic .changeDiv a {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+
+.FocusPic .changeDiv a  img {
+	width: 324px;
+	height: 278px;
+}
+
+.title {
+	position: absolute;
+	left: 0px;
+	bottom: 0;
+	width: 205px;
+	height: 20px;
+	line-height: 20px;
+	overflow: hidden;
+	text-align: left;
+}
+
+
+.FocusPic .title a {
+	display: block;
+	padding-left: 10px;
+	color: #fff;
+	font-size: 12px;
+}
+
+.FocusPic .title-bg {
+	background: #666;
+	filter: alpha(opacity = 50);
+	opacity: 0.5;
+}
+
+.FocusPic .change {
+	bottom: 0px;
+	height: 20px;
+	right: 3px;
+	_right: 4px;
+	position: absolute;
+	text-align: right;
+	z-index: 9999;
+}
+
+.FocusPic .change i {
+	background: #666;
+	color: #FFF;
+	cursor: pointer;
+	font-family: Arial;
+	font-size: 12px;
+	line-height: 15px;
+	margin-right: 2px;
+	padding: 2px 6px;
+	font-style: normal;
+	height: 15px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+}
+.FocusPic .change i.cur {
+  background: #FF7700;
+}
+.imgbox {
+    width: 324px;
+    height: 260px;
+    border: 2px solid #f0f0f0;
+    margin: 10px;
+    float: left;
+}

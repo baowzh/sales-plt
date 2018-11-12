@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="role">
+
+	<resultMap id="roleInfoMap" type="com.xunno.sales.modules.system.model.Role">
+		<result column="ROLE_CODE" property="rightcode" jdbcType="CHAR" />
+		<result column="ROLE_NAME" property="rightname" jdbcType="VARCHAR" />
+		<result column="ROLE_ATTR" property="roleAttr" jdbcType="CHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+		<result column="UPDATE_STAFF_ID" property="updateStaffId"
+			jdbcType="CHAR" />
+		<result column="UPDATE_DEPART_ID" property="updateDepartId"
+			jdbcType="CHAR" />
+		<result column="VALIDFLAG" property="validFlag" jdbcType="VARCHAR" />
+		<result column="DEPART_NAME" property="departName" jdbcType="VARCHAR" />
+
+	</resultMap>
+
+
+	<!-- 获取展会信息 -->
+	<select id="getRoles" resultMap="roleInfoMap" parameterType="java.util.Map">
+		SELECT B.* 
+		FROM
+
+		<if test="staffid != null and staffid !=''">
+			TF_M_STAFFFUNCRIGHT A,
+		</if>
+		TD_M_ROLE B 
+
+		where 1=1
+
+		<if test="staffid != null and staffid !=''">
+			and A.RIGHT_CODE = B.ROLE_CODE and A.RIGHT_ATTR='1'
+			and
+			A.STAFF_ID = #{staffid}
+		</if>
+		<if test="rightcode != null and rightcode !=''">
+			and B.ROLE_CODE = #{rightcode}
+		</if>
+		<if test="rightname != null and rightname !=''">
+			and B.ROLE_NAME Like '%'||#{rightname}||'%'
+		</if>
+	</select>
+
+	<select id="oneRole" resultMap="roleInfoMap"
+		parameterType="com.xunno.sales.modules.system.model.Role">
+		SELECT B.*
+		FROM
+		TD_M_ROLE B
+		<where>
+			<if test="rightcode != null and rightcode !=''">
+				and B.ROLE_CODE = #{rightcode}
+			</if>
+			<if test="rightname != null and rightname !=''">
+				and B.ROLE_NAME = #{rightname}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="pagingQueryRole" resultMap="roleInfoMap"
+		parameterType="com.xunno.sales.view.modules.system.bean.RoleDBPagingPrams">
+		SELECT B.*
+		FROM
+
+		TD_M_ROLE B 
+		where 1=1
+		<if test="rightcode != null and rightcode !=''">
+			and B.ROLE_CODE = #{rightcode}
+		</if>
+		<if test="rightname != null and rightname !=''">
+			and B.ROLE_NAME Like '%'||#{rightname}||'%'
+		</if>
+	</select>
+
+
+
+
+	<select id="getRoleInfosByUrl" resultType="com.asiainfo.eframe.security.model.RoleInfo"
+		parameterType="java.util.Map">
+		SELECT A.RIGHT_CODE RIGHTCODE, A.RIGHT_NAME RIGHTNAME
+		FROM
+		TD_M_FUNCRIGHT A
+		INNER JOIN TD_S_MODFILE B
+		ON A.MOD_CODE = B.MOD_CODE
+		WHERE 1=1
+		<if test="htmlname != null and htmlname !=''">
+			AND B.MOD_NAME LIKE '%'||#{htmlname}||''
+		</if>
+		UNION
+		SELECT T.ROLE_CODE RIGHTCODE, C.RIGHT_NAME RIGHTNAME
+		FROM
+		TD_S_MODFILE B
+		INNER JOIN TD_M_FUNCRIGHT C
+		ON B.MOD_CODE = C.MOD_CODE
+		INNER JOIN TF_M_ROLEFUNCRIGHT T
+		ON C.RIGHT_CODE = T.RIGHT_CODE
+		WHERE 1=1
+		<if test="htmlname != null and htmlname !=''">
+			AND B.MOD_NAME LIKE '%'||#{htmlname}||''
+		</if>
+
+	</select>
+
+	<select id="getMaxRoleCode" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT Max(r.ROLE_CODE) FROM TD_M_ROLE r
+
+	</select>
+
+
+	<insert id="insertRole" parameterType="com.xunno.sales.modules.system.model.Role">
+
+		Insert into TD_M_ROLE
+		(ROLE_CODE,ROLE_NAME,ROLE_ATTR,REMARK,UPDATE_TIME,UPDATE_STAFF_ID,UPDATE_DEPART_ID,VALIDFLAG)
+		values (
+		#{rightcode,jdbcType=CHAR},
+		#{rightname,jdbcType=VARCHAR},
+		#{roleAttr,jdbcType=CHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=DATE},
+		#{updateStaffId,jdbcType=CHAR},
+		#{updateDepartId,jdbcType=CHAR},
+		#{validFlag,jdbcType=CHAR})
+
+	</insert>
+	<update id="updateRole" parameterType="com.xunno.sales.modules.system.model.Role">
+
+		update TD_M_ROLE set
+		ROLE_NAME = #{rightname,jdbcType=VARCHAR},
+		ROLE_ATTR =
+		#{roleAttr,jdbcType=CHAR},
+		REMARK = #{remark,jdbcType=VARCHAR},
+		UPDATE_TIME = #{updateTime,jdbcType=DATE},
+		UPDATE_STAFF_ID =
+		#{updateStaffId,jdbcType=CHAR},
+		UPDATE_DEPART_ID =
+		#{updateDepartId,jdbcType=CHAR},
+		VALIDFLAG = #{validFlag,jdbcType=CHAR}
+		where ROLE_CODE = #{rightcode}
+
+	</update>
+
+	<delete id="delRole" parameterType="com.xunno.sales.modules.system.model.Role">
+
+		DELETE FROM TD_M_ROLE where
+		ROLE_CODE = #{rightcode}
+
+	</delete>
+
+	<select id="getRoleInfosByUsername" resultType="com.asiainfo.eframe.security.model.RoleInfo"
+		parameterType="java.util.Map">
+		SELECT A.RIGHT_CODE RIGHTCODE, A.RIGHT_NAME RIGHTNAME
+		FROM
+		TD_M_FUNCRIGHT A
+		INNER JOIN TF_M_STAFFFUNCRIGHT B
+		ON A.RIGHT_CODE =
+		B.RIGHT_CODE
+		WHERE 1=1
+		<if test="username != null and username !=''">
+			AND B.STAFF_ID = #{username}
+		</if>
+		AND A.RIGHT_CODE LIKE 'ORG%'
+		UNION
+		SELECT DISTINCT C.RIGHT_CODE
+		RIGHTCODE, C.RIGHT_NAME RIGHTNAME
+		FROM TF_M_STAFFFUNCRIGHT A
+		INNER JOIN
+		TF_M_ROLEFUNCRIGHT B
+		ON A.RIGHT_CODE = B.ROLE_CODE
+		INNER JOIN
+		TD_M_FUNCRIGHT C
+		ON C.RIGHT_CODE = B.RIGHT_CODE
+		WHERE 1=1
+		<if test="username != null and username !=''">
+			AND A.STAFF_ID = #{username}
+		</if>
+		AND C.RIGHT_CODE LIKE 'ORG%'
+
+	</select>
+</mapper>

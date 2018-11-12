@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="funcright">
+	<resultMap id="funcrightMap"
+		type="com.xunno.sales.modules.system.model.Funcright">
+		<result column="RIGHT_CODE" property="rightCode" jdbcType="VARCHAR" />
+		<result column="RIGHT_NAME" property="rightName" jdbcType="VARCHAR" />
+		<result column="CLASS_CODE" property="classCode" jdbcType="VARCHAR" />
+		<result column="RIGHT_ATTR" property="rightAttr" jdbcType="CHAR" />
+		<result column="MOD_CODE" property="modCode" jdbcType="VARCHAR" />
+		<result column="PARENT_MENU_ID" property="parentMenuCode" jdbcType="VARCHAR" />
+		<result column="HELP_INDEX" property="helpIndex" jdbcType="DECIMAL" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+		<result column="UPDATE_STAFF_ID" property="updateStaffId"
+			jdbcType="CHAR" />
+		<result column="UPDATE_DEPART_ID" property="updateDepartId"
+			jdbcType="CHAR" />
+		<result column="MENU_TITLE" property="menuTitle" jdbcType="DATE" />
+		
+		<result column="DEPART_NAME" property="departName" jdbcType="DATE" />
+
+	</resultMap>
+	<select id="oneFuncright" parameterType="java.lang.String"
+		resultMap="funcrightMap">
+		select * from TD_M_FUNCRIGHT f where f.RIGHT_CODE =
+		#{rightCode}
+	</select>
+	<select id="getFuncrights" parameterType="java.util.Map"
+		resultMap="funcrightMap">
+		select t.*,s.PARENT_MENU_ID,s.MENU_TITLE from TD_M_FUNCRIGHT t ,TD_B_SYSTEMGUIMENU s
+		where t.MOD_CODE = s.MENU_ID
+		
+			<if test="classCode != null and classCode !=''">
+				and t.CLASS_CODE=#{classCode}
+			</if>
+			<if test="modeCode != null and modeCode !=''">
+				and t.MOD_CODE=#{modeCode}
+			</if>
+			<if test="rightAttr != null and rightAttr !=''">
+				and t.RIGHT_ATTR=#{rightAttr}
+			</if>
+			<if test="rightName != null and rightName !=''">
+				and (t.RIGHT_NAME LIKE '%'||#{rightName}||'%' or s.MENU_TITLE  LIKE '%'||#{rightName}||'%' ) 
+			</if>
+	</select>
+	<select id="findFuncrightChilds" parameterType="java.util.Map"
+		resultMap="funcrightMap">
+				select t.*,s.PARENT_MENU_ID,s.MENU_TITLE from TD_M_FUNCRIGHT t , TD_B_SYSTEMGUIMENU s 
+				where t.MOD_CODE = s.MENU_ID and ( s.MENU_ID in (
+						select  s2.MENU_ID  from  TD_B_SYSTEMGUIMENU s2 start with 
+ 						( s2.MENU_TITLE  LIKE '%'||#{rightName}||'%'   or  s2.MENU_ID in ( select  t2.MOD_CODE  from  TD_M_FUNCRIGHT t2 where   t2.RIGHT_NAME  LIKE '%'||#{rightName}||'%'  )  ) connect by s2.PARENT_MENU_ID=prior s2.MENU_ID 
+						) or s.MENU_ID in (
+							select  s2.MENU_ID  from  TD_B_SYSTEMGUIMENU s2 start with 
+ 							( s2.MENU_TITLE  LIKE '%'||#{rightName}||'%'   or  s2.MENU_ID in ( select  t2.MOD_CODE  from  TD_M_FUNCRIGHT t2 where   t2.RIGHT_NAME  LIKE '%'||#{rightName}||'%'  )  ) connect by prior s2.PARENT_MENU_ID= s2.MENU_ID 
+							))
+	
+	</select>
+	<select id="pagingQueryFuncright" parameterType="com.xunno.sales.view.modules.system.bean.FuncDBPagingPrams"
+		resultMap="funcrightMap">
+		select t.* , C.DEPART_NAME from TD_M_FUNCRIGHT t , TD_M_DEPART C
+		where t.UPDATE_DEPART_ID = c.DEPART_ID
+
+			<if test="rightName != null and rightName !=''">
+				and t.RIGHT_NAME LIKE '%'||#{rightName}||'%' 
+			</if>
+			<if test="rightCode != null and rightCode !=''">
+				and t.RIGHT_CODE LIKE '%'||#{rightCode}||'%' 
+			</if>
+			<if test="modCode != null and modCode !=''">
+				and t.MOD_CODE LIKE '%'||#{modCode}||'%' 
+			</if>
+
+	</select>
+	
+	
+	<insert id="insertFuncright"
+		parameterType="com.xunno.sales.modules.system.model.Funcright">
+
+		Insert into TD_M_FUNCRIGHT
+		(RIGHT_CODE,
+		RIGHT_NAME, CLASS_CODE, RIGHT_ATTR, MOD_CODE, HELP_INDEX, REMARK,
+		UPDATE_TIME, UPDATE_STAFF_ID, UPDATE_DEPART_ID)
+		values (
+		#{rightCode,jdbcType=VARCHAR},
+		#{rightName,jdbcType=VARCHAR},
+		#{classCode,jdbcType=VARCHAR},
+		#{rightAttr,jdbcType=CHAR},
+		#{modCode,jdbcType=VARCHAR},
+		#{helpIndex,jdbcType=DECIMAL},
+		#{remark,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=DATE},
+		#{updateStaffId,jdbcType=CHAR},
+		#{updateDepartId,jdbcType=CHAR})
+	</insert>
+	<update id="updateFuncright"
+		parameterType="com.xunno.sales.modules.system.model.Funcright">
+
+		update TD_M_FUNCRIGHT set
+		RIGHT_NAME =
+		#{rightName,jdbcType=VARCHAR},
+		CLASS_CODE =
+		#{classCode,jdbcType=VARCHAR},
+		RIGHT_ATTR =
+		#{rightAttr,jdbcType=CHAR},
+		MOD_CODE =
+		#{modCode,jdbcType=CHAR},
+		HELP_INDEX =
+		#{helpIndex,jdbcType=DECIMAL},
+		REMARK =
+		#{remark,jdbcType=VARCHAR},
+		UPDATE_TIME = #{updateTime,jdbcType=DATE},
+		UPDATE_STAFF_ID =
+		#{updateStaffId,jdbcType=CHAR},
+		UPDATE_DEPART_ID =
+		#{updateDepartId,jdbcType=CHAR}
+		where RIGHT_CODE = #{rightCode}
+
+	</update>
+	<delete id="delFuncright"
+		parameterType="com.xunno.sales.modules.system.model.Funcright">
+
+		DELETE FROM TD_M_FUNCRIGHT where RIGHT_CODE =
+		#{rightCode}
+
+	</delete>
+</mapper>

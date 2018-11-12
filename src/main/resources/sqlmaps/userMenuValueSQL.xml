@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="usermenuvalue">
+	
+	<select id="getUserMenuValues" resultType="com.asiainfo.eframe.model.UserMenuValue"
+		parameterType="java.util.Map">
+	  SELECT   N.menu_id MENUID, N.menu_title MENUNAME, M.mod_name   MENUURL, N.parent_menu_id   PARENTID 
+       FROM TF_M_STAFFFUNCRIGHT S, TD_M_FUNCRIGHT F, TD_S_MODFILE M,TD_B_SYSTEMGUIMENU N
+     WHERE s.right_attr = '0'
+     AND S.right_tag = '1'
+	   AND F.right_attr = '0'
+	   AND M.mod_code   = N.menu_id 
+	   AND N.menu_id  = F.mod_code
+	   AND S.right_code = F.right_code
+	   AND (S.rsvalue1 IS NULL OR S.rsvalue1 != '1')
+	   AND S.staff_id = #{username}
+	   AND S.DEPART_ID = #{departid}
+	UNION
+     SELECT   N.menu_id MENUID, N.menu_title MENUNAME, M.mod_name   MENUURL, N.parent_menu_id   PARENTID 
+       FROM TF_M_STAFFFUNCRIGHT S,
+       TD_M_FUNCRIGHT      F,
+       TF_M_ROLEFUNCRIGHT  R,
+       TD_S_MODFILE        M,
+       TD_B_SYSTEMGUIMENU N
+ WHERE S.RIGHT_ATTR = '1'
+   AND S.RIGHT_TAG = '1'
+   AND S.RIGHT_CODE = R.ROLE_CODE
+   AND R.RIGHT_CODE = F.RIGHT_CODE
+   AND M.MOD_CODE  = N.MENU_ID
+   AND N.MENU_ID = F.MOD_CODE
+   AND (R.RSVALUE1 IS NULL OR R.RSVALUE1 != '1')
+   AND (S.RSVALUE1 IS NULL OR S.RSVALUE1 != '1')
+   AND NOT EXISTS (SELECT 1
+          FROM TF_M_STAFFFUNCRIGHT
+         WHERE STAFF_ID = S.STAFF_ID
+           AND RIGHT_CODE = R.RIGHT_CODE
+           AND (RIGHT_TAG = '0' OR RSVALUE1 != '1'))
+   AND S.STAFF_ID = #{username}
+   AND S.DEPART_ID = #{departid}
+	</select>
+	
+	<!-- 获取有 权限的下级菜单 -->
+	<select id="getParentMenus"  resultType="com.asiainfo.eframe.model.UserMenuValue"
+		parameterType="java.lang.String">
+        
+        select distinct a.menu_id MENUID, a.menu_title MENUNAME, a.parent_menu_id PARENTID
+          from TD_B_SYSTEMGUIMENU a where a.menu_id=#{_parameter}
+        
+	</select>
+
+</mapper>

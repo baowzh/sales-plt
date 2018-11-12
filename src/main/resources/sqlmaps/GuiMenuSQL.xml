@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="systemGuiMenu">
+	<resultMap id="systemGuiMenuMap"
+		type="com.xunno.sales.modules.system.model.SystemGuiMenu">
+		<result column="MENU_ID" property="menuId" jdbcType="CHAR" />
+		<result column="PARENT_MENU_ID" property="parentMenuId"
+			jdbcType="CHAR"  />
+		<result column="SUBSYS_CODE" property="subsysCode" jdbcType="CHAR"  />
+		<result column="MENU_TITLE" property="menuTitle" jdbcType="VARCHAR"  />
+		<result column="MENU_TEXT" property="menuText" jdbcType="VARCHAR"  />
+		<result column="IMAGE_INDEX" property="imageIndex" jdbcType="DECIMAL"  />
+		<result column="SHOW_ORDER" property="showOrder" jdbcType="DECIMAL"  />
+		<result column="TOOLBAR_INDEX" property="toolbarIndex"
+			jdbcType="DECIMAL"  />
+		<result column="DEVIDE_TYPE" property="devideType" jdbcType="CHAR"  />
+		<result column="CLASS_LEVEL" property="classLevel" jdbcType="DECIMAL" />
+		<result column="DISPLAY_MODE" property="displayMode" jdbcType="CHAR"  />
+		<result column="RIGHT_CODE" property="rightCode" jdbcType="VARCHAR"  />
+		<result column="SHORT_KEY" property="shortKey" jdbcType="VARCHAR"  />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR"  />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="DATE"  />
+		<result column="UPDATE_STAFF_ID" property="updateStaffId"
+			jdbcType="CHAR"  />
+		<result column="UPDATE_DEPART_ID" property="updateDepartId"
+			jdbcType="CHAR"  />
+		<result column="IMAGE_URL" property="imageUrl" jdbcType="VARCHAR"  />
+		<result column="MENU_STATUS" property="menuStatus" jdbcType="CHAR"  />
+		<result column="IMAGE_ID" property="imageId" jdbcType="DECIMAL"  />
+		<result column="MENU_TYPE" property="menuType" jdbcType="CHAR"  />
+
+	</resultMap>
+	<select id="oneSystemGuiMenu" parameterType="java.lang.String"
+		resultMap="systemGuiMenuMap">
+		select * from TD_B_SYSTEMGUIMENU t where t.MENU_ID =
+		#{menuId}
+	</select>
+	<select id="getSystemGuiMenus" parameterType="java.util.Map"
+		resultMap="systemGuiMenuMap">
+		select * from TD_B_SYSTEMGUIMENU t
+
+		<where>
+			<if test="parentMenuId != null and parentMenuId !=''">
+				and t.PARENT_MENU_ID=#{parentMenuId}
+			</if>
+		</where>
+
+	</select>
+	<select id="getMaxMenuIdBySubsysCode" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT Max(m.MENU_ID)  FROM TD_B_SYSTEMGUIMENU m where  m.SUBSYS_CODE=#{subsysCode}
+
+	</select>
+	<insert id="insertSystemGuiMenu"
+		parameterType="com.xunno.sales.modules.system.model.SystemGuiMenu">
+
+		 Insert into TD_B_SYSTEMGUIMENU
+		(MENU_ID,PARENT_MENU_ID,SUBSYS_CODE,MENU_TITLE,MENU_TEXT,IMAGE_INDEX,SHOW_ORDER,TOOLBAR_INDEX,DEVIDE_TYPE,CLASS_LEVEL,DISPLAY_MODE,RIGHT_CODE,SHORT_KEY,REMARK,UPDATE_TIME,UPDATE_STAFF_ID,UPDATE_DEPART_ID,IMAGE_URL,MENU_STATUS,IMAGE_ID,MENU_TYPE)
+		values (
+		#{menuId,jdbcType=CHAR},
+		#{parentMenuId,jdbcType=CHAR},
+		#{subsysCode,jdbcType=CHAR},
+		#{menuTitle,jdbcType=VARCHAR},
+		#{menuText,jdbcType=VARCHAR},
+		#{imageIndex,jdbcType=DECIMAL},
+		#{showOrder,jdbcType=DECIMAL},
+		#{toolbarIndex,jdbcType=DECIMAL},
+		#{devideType,jdbcType=CHAR},
+		#{classLevel,jdbcType=DECIMAL},
+		#{displayMode,jdbcType=DECIMAL},
+		#{rightCode,jdbcType=VARCHAR},
+		#{shortKey,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=DATE},
+		#{updateStaffId,jdbcType=CHAR},
+		#{updateDepartId,jdbcType=CHAR},
+		#{imageUrl,jdbcType=VARCHAR},
+		#{menuStatus,jdbcType=CHAR},
+		#{imageId,jdbcType=DECIMAL},
+		#{menuType,jdbcType=CHAR})
+
+	</insert>
+	<update id="updateSystemGuiMenu"
+		parameterType="com.xunno.sales.modules.system.model.SystemGuiMenu">
+
+		update TD_B_SYSTEMGUIMENU set
+		PARENT_MENU_ID = #{parentMenuId,jdbcType=CHAR},
+		SUBSYS_CODE = #{subsysCode,jdbcType=CHAR},
+		MENU_TITLE = #{menuTitle,jdbcType=VARCHAR},
+		MENU_TEXT = #{menuText,jdbcType=VARCHAR},
+		IMAGE_INDEX = #{imageIndex,jdbcType=DECIMAL},
+		SHOW_ORDER = #{showOrder,jdbcType=DECIMAL},
+		TOOLBAR_INDEX = #{toolbarIndex,jdbcType=DECIMAL},
+		DEVIDE_TYPE = #{devideType,jdbcType=CHAR},
+		CLASS_LEVEL = #{classLevel,jdbcType=DECIMAL},
+		DISPLAY_MODE = #{displayMode,jdbcType=DECIMAL},
+		RIGHT_CODE = #{rightCode,jdbcType=VARCHAR},
+		SHORT_KEY = #{shortKey,jdbcType=VARCHAR},
+		REMARK = #{remark,jdbcType=VARCHAR},
+		UPDATE_TIME = #{updateTime,jdbcType=DATE},
+		UPDATE_STAFF_ID = #{updateStaffId,jdbcType=CHAR},
+		UPDATE_DEPART_ID = #{updateDepartId,jdbcType=CHAR},
+		IMAGE_URL = #{imageUrl,jdbcType=VARCHAR},
+		MENU_STATUS = #{menuStatus,jdbcType=CHAR},
+		IMAGE_ID = #{imageId,jdbcType=DECIMAL},
+		MENU_TYPE = #{menuType,jdbcType=CHAR}
+		where MENU_ID = #{menuId}
+
+	</update>
+	<delete id="delSystemGuiMenu"
+		parameterType="com.xunno.sales.modules.system.model.SystemGuiMenu">
+
+		DELETE FROM TD_B_SYSTEMGUIMENU 	where MENU_ID = #{menuId}
+
+	</delete>
+</mapper>

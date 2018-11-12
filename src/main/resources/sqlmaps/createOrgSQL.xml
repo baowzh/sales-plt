@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="createOrg">
+	
+
+	<insert id="insertStaff"
+		parameterType="com.asiainfo.eframe.security.model.UserInfo">
+
+		Insert into
+		td_m_staff
+		(
+		   staff_id,
+           depart_id,
+           staff_name,
+        eparchy_code
+		   
+		)
+		values (
+		  #{staffid,jdbcType=CHAR},
+          #{departid,jdbcType=VARCHAR},
+          #{staffname,jdbcType=CHAR} ,         
+	  	  '0475'
+	  	 
+	  	  
+		)
+
+	</insert>
+	
+	<insert id="insertfuncright"
+		parameterType="java.util.Map">
+
+		Insert into
+		tf_m_stafffuncright
+		(
+		   staff_id,
+           right_code,
+           right_attr,
+           right_tag,
+           depart_id
+		)
+		values (
+		  #{staff_id,jdbcType=CHAR},
+          #{right_code,jdbcType=VARCHAR},
+          '1' ,
+          '1',         
+	  	  #{depart_id,jdbcType=VARCHAR}
+		)
+
+	</insert>
+	
+	<insert id="insertStaffPass"
+		parameterType="java.util.Map">
+
+		Insert into
+		tf_m_staffpasswd
+		(
+		  staff_id,
+         staff_passwd,
+         update_time
+
+
+		)
+		values (
+		   #{staff_id,jdbcType=CHAR},
+           #{staff_passwd,jdbcType=CHAR},
+           #{update_time,jdbcType=DATE}
+		)
+
+	</insert>
+	
+	
+	
+
+	
+</mapper>

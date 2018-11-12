@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xunno.sales.modules.category.model.PageCateroty">
+	
+	<select id="getPageCategorys" parameterType="java.lang.String" resultType="com.xunno.sales.modules.category.model.PageCateroty">
+	    select b.* from td_category a ,td_page_category  b where a.id=b.catId and b.pageId=#{_parameter} order by showorder
+	</select>
+	
+	
+</mapper>

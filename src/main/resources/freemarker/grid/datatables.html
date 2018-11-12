@@ -1,0 +1,166 @@
+<table  id="${gridMeta.id}" toolbar="#${gridMeta.id}tb"  <#if gridMeta.gridCss??> style="${gridMeta.gridCss}" </#if>  ></table>
+<script type="text/javascript">
+$(document)
+		.ready(
+				function() {$('#${gridMeta.id}')
+							.DataTable(
+									{
+										"aLengthMenu" : [ [ 5, 10, 20 ],
+												[ 5, 10, 20 ] ],
+										"searching" : false,
+										"sDom" : '<"top"f>rt<"bottom"lip>',
+										"fnDrawCallback" : function(oSettings) {
+										 var api = this.api();
+										 api.installCheckbox();										 											
+											$('#${gridMeta.id}_pagecount')
+													.text(
+															'总共'
+																	+ Math
+																			.ceil(oSettings
+																					.fnRecordsDisplay()
+																					/ oSettings._iDisplayLength)
+																	+ '页');
+										},
+										"iDisplayLength" : 10,
+										"bProcessing" : true,
+										"sPaginationType" : "extStyle",
+										"bSort" : false,
+										"scrollX" : "true",
+										"scrollY" : "1200px",
+										"scrollCollapse" : "true",
+										"bLengthChange" : true,
+										"bInfo" : true,
+										
+										<#if gridMeta.paging=false >
+										  bPaginate:false,
+										  bScrollInfinite:true,
+										</#if>
+										"sAjaxSource" : "${gridMeta.dataSrc}",
+										"serverData" : function(source, data,
+												callback, settings) {
+											var postparams = '';
+											<#if gridMeta.paging=true >
+											postparams = {
+												start : settings._iDisplayStart,
+												pagesize : settings._iDisplayLength,
+												sEcho : data[0].value
+											};
+											</#if>
+											<#if gridMeta.paging=false >
+											postparams = {
+												
+											};
+											</#if>
+											
+											var params = jsonForm('${gridMeta.formId}');
+											if (params != null) {
+												$.extend(postparams, params);
+											}
+											;
+											<#if gridMeta.paging=true >
+											   settings.jqXHR = $.ajax({"dataType" : 'json',"type" : "POST","url" : source,"data" : postparams,"success" : function(json) {settings.fnRecordsDisplay(json.iTotalRecords);  $(settings.oInstance).trigger('xhr',	[ settings, json ]);callback(json);  },"error" : function(XMLHttpRequest, textStatus, errorThrown) {$('#mytable1').DataTable().processing(false);BDialog.error(XMLHttpRequest.responseText); }});},
+											</#if>
+											<#if gridMeta.paging=false>											 	
+											   settings.jqXHR = $.ajax({"dataType" : 'json',"type" : "POST","url" : source,"data" : postparams,"success" : function(json) {var returndata={recordsTotal:json.length,recordsFiltered: json.length, models:json};;$(settings.oInstance).trigger('xhr',	[ settings, returndata ]);callback(returndata);  },"error" : function(XMLHttpRequest, textStatus, errorThrown) {$('#mytable').DataTable().processing(false);BDialog.error(XMLHttpRequest.responseText);	}});},
+											</#if>		
+										
+										"bServerSide" : true,
+										"sAjaxDataProp" : "models",
+										"oLanguage" : {
+											"sLengthMenu" : "每页显示 _MENU_ 条记录",
+											"sZeroRecords" : "没有检索到数据",
+											"sInfo" : "本页显示第 _START_ 至 _END_ 条数据 共 _TOTAL_ 条",
+											"sInfoEmtpy" : "没有数据",
+											"sProcessing" : "<img src='/data-center/resources/gentelella/images/datatable_loading.gif'>",
+											"sSearch" : "搜索",
+											"oPaginate" : {
+												"sFirst" : "首页",
+												"sPrevious" : "上一页",
+												"sNext" : "下一页",
+												"sLast" : "末页"
+											}
+										},
+										"aoColumns" : [
+												<#if gridMeta.checkBox=true >
+												{
+													"sTitle" : "<input id=\"${gridMeta.id}_input_checkall\" type=\"checkbox\" class=\"tableflat\" ></input>",
+													"mDataProp" : null,
+													"sWidth" : "25",
+													"bSortable" : false
+												},</#if>
+												<#if gridMeta.haschild=true >
+												  {"className": 'details-control', "orderable": false, "data": null, "bSortable": false, "defaultContent": ''},
+												</#if>
+											<#list gridMeta.cols as col> 
+												{
+													"sTitle" : "${col.title}",
+													"sName" : "${col.field}",
+													"mDataProp" : "${col.field}",
+													"mData" : "${col.field}",
+													"sWidth" : "${col.width}",
+													"bSortable" : false,
+													"bVisible" : true
+												<#if col.render??>
+												,mRender:
+												   function(data, type, full) { var rowData=full; var s = '<span>' + ${col.render}
+							          + '</span>'; if(data.length>300/14) s = '<span data-toggle="tooltip" data-placement="bottom" title="' + data + '">"'
+							          + ${col.render} + '</span>'; return s
+							             }
+												 
+												
+												</#if>	
+												}
+												<#if col?has_next >, </#if>
+                                            </#list>
+												 ]
+											<#if gridMeta.checkBox=true >
+												 ,
+										aoColumnDefs : [ {
+											targets : 0,
+											render : function(data, type, row,
+													meta) {
+												return '<input type="checkbox" name="checklist" value="'
+														+ row[1]
+														+ '" class="tableflat" ></input>';
+											}
+											
+										}   ]</#if>
+									});
+					$.extend(${gridMeta.id}, {
+						getSelrow : function() {
+							var seleindexs = Array();
+							$('#${gridMeta.id} tbody .icheckbox_flat-green').each(
+									function(obj, index) {
+										if (obj == undefined) {
+											return;
+										}
+										if ($(this).hasClass('checked')) {
+											seleindexs.push(obj);
+										}
+									});
+							return seleindexs
+						}
+					});
+					
+					<#if gridMeta.haschild=true >
+					 $('#${gridMeta.id} tbody').on('click', 'td.details-control', function () {var tr = $(this).closest('tr'); var row = $('#${gridMeta.id}').DataTable().row( tr ); if ( row.child.isShown() ) { row.child.hide(); tr.removeClass('shown'); } else { row.child( $('#${gridMeta.id}').DataTable().format(row.data()) ).show(); tr.addClass('shown'); } } );
+					</#if>
+					
+					$('#${gridMeta.id}_wrapper table')
+							.addClass(
+									"table table-striped responsive-utilities jambo_table table table-striped responsive-utilities jambo_table");
+					$('#${gridMeta.id}').width('100%')
+					});
+				<#if gridMeta.haschild=true >
+					 $.fn.dataTable.Api.register('format()' , function(d){var info;
+			       <#if gridMeta.childFunc??>
+			         info = ${gridMeta.childFunc}.call(this, d);				       
+			         <#else> 
+				      info = '<div>table的childFunc没有绑定获取函数</div>'; 
+		          	</#if>
+			        return info; }); ;
+			    </#if>
+					
+					
+					
+</script>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="statistic">
+	<!-- 全旗总项目数 -->
+	<select id="getProjectCountTop" resultType="java.lang.Long">
+		select count(1) from
+		td_f_project a,td_m_depart b where
+		a.depart_id=b.depart_id and b.type=2
+	</select>
+	<!-- 全旗项目总金额合计 -->
+	<select id="getProjectSumTop" resultType="java.lang.Double">
+		select sum(a.amount)
+		from td_f_project a,td_m_depart b where
+		a.depart_id=b.depart_id and
+		b.type in (1,2)
+	</select>
+	<!-- 按照部门分组 -->
+	<select id="getProjectCountByDepart" resultType="java.util.Map">
+		select
+		count(a.amount) count,b.depart_name name,b.depart_id id from
+		td_f_project a,td_m_depart b where
+		a.depart_id=b.depart_id and b.type=1
+		group by b.depart_name ,b.depart_id
+	</select>
+	<!-- 按照部门分组 -->
+	<select id="getProjectSumByDepart" resultType="java.util.Map">
+		select
+		sum(a.amount) sum,b.depart_name name,b.depart_id id from td_f_project
+		a,td_m_depart b where
+		a.depart_id=b.depart_id and b.type=1 group by
+		b.depart_name ,b.depart_id
+	</select>
+
+	<!-- 按照乡镇分组 获取项目个数 -->
+	<select id="getProjectCountByTown" resultType="java.util.Map">
+		select
+		count(a.amount) count,b.depart_name name,b.depart_id id from
+		td_f_project a,td_m_depart b where
+		a.depart_id=b.depart_id and b.type=2
+		group by b.depart_name ,b.depart_id
+	</select>
+	<!-- 按照乡镇分组获取项目总额 -->
+	<select id="getProjectSumByTown" resultType="java.util.Map">
+		select sum(a.amount)
+		sum,b.depart_name name,b.depart_id id from td_f_project a,td_m_depart
+		b where
+		a.depart_id=b.depart_id and b.type=2 group by b.depart_name
+		,b.depart_id
+	</select>
+
+	<!-- 全旗总项额到户资金 -->
+	<select id="getFundSumTop" resultType="java.lang.Double">
+		select ROUND(sum(a.amount)/10000,4) from
+		td_f_funds a,td_m_depart b where
+		a.depart_id=b.depart_id and b.type in (1,2)
+	</select>
+
+	<!-- 按照部门分组统计到户资金 -->
+	<select id="getFundByDepart" resultType="java.util.Map">
+		select ROUND(sum(a.amount)/10000,4)
+		sum,b.depart_name name,b.depart_id id from td_f_funds a,td_m_depart b
+		where
+		a.depart_id=b.depart_id and b.type=1 group by b.depart_name
+		,b.depart_id
+	</select>
+
+	<!-- 按照乡镇分组计到户资金 -->
+	<select id="getFundByTown" resultType="java.util.Map">
+		select ROUND(sum(a.amount)/10000,4)
+		sum,b.depart_name name,b.depart_id id from td_f_funds a,td_m_depart
+		b where
+		a.depart_id=b.depart_id and b.type=2 group by b.depart_name
+		,b.depart_id
+	</select>
+
+	<!-- 按照嘎查村分组获取指定乡镇下的到户资金 -->
+	<select id="getFundGroupByhamlet" resultType="java.util.Map">
+		select
+		ROUND(sum(a.amount)/10000,4) sum,b.depart_name name,b.depart_id id from td_f_funds
+		a,td_m_depart b where
+		a.depart_id=b.depart_id and b.type=2 and
+		b.parent_depart_id=#{departId} group by b.depart_name ,b.depart_id
+	</select>
+	<!--栏目排名 -->
+	<select id="newSOrder" resultType="java.util.Map">
+		select count(1),b.depart_name from td_f_news,td_m_depart
+	</select>
+
+
+	<!-- 获取某个部门项目数 -->
+	<select id="getDepartProjectCount" resultType="java.lang.Long"
+		parameterType="java.util.Map">
+		select count(1) from td_f_project a,td_m_depart b where
+		a.depart_id=b.depart_id and b.type=#{type} and a.depart_id=#{departId}
+	</select>
+	<!-- 获取某个部门项目总金额 -->
+	<select id="getDepartProjectSum" resultType="java.lang.Double"
+		parameterType="java.util.Map">
+		select sum(a.amount) from td_f_project a,td_m_depart b
+		where
+		a.depart_id=b.depart_id and b.type=#{type} and
+		a.depart_id=#{departId}
+	</select>
+
+	<!-- 全旗总项额到户资金 -->
+	<select id="getDepartFundSum" resultType="java.lang.Double"
+		parameterType="java.util.Map">
+		select ROUND(sum(a.amount)/10000,4) from td_f_funds a,td_m_depart b
+		where
+		a.depart_id=b.depart_id and b.type=#{type} and
+		a.depart_id=#{departId}
+	</select>
+
+	<select id="dwgkStatistic" resultType="java.util.Map">
+		select * from (select count(1) num, b.depart_id id ,b.depart_name name from
+		td_f_news a,td_m_depart b ,td_category c where a.depart_id=b.depart_id
+		and (a.catid=c.id or a.typeid=c.id) and c.varName='dwgk' and b.type in (1,2,3)
+		group by b.depart_id,b.depart_name ) d order by d.num desc limit 10
+	</select>
+	
+	<select id="pagingDwgkStatistic" resultType="java.util.Map">
+		select * from (select count(1) num, b.depart_id id ,b.depart_name name from
+		td_f_news a,td_m_depart b ,td_category c where a.depart_id=b.depart_id
+		and (a.catid=c.id or a.typeid=c.id) and c.varName='dwgk' and b.type in (1,2,3)
+		group by b.depart_id,b.depart_name ) d order by d.num desc 
+	</select>
+
+	<select id="zwgkStatistic" resultType="java.util.Map">
+		select * from (select count(1) num, b.depart_id id ,b.depart_name name from
+		td_f_news a,td_m_depart b ,td_category c where a.depart_id=b.depart_id
+		and (a.catid=c.id or a.typeid=c.id) and c.varName='zwgk' and b.type in (1,2,3)
+		group by b.depart_id,b.depart_name ) d order by d.num desc limit 10
+	</select>
+	<select id="pagingZwgkStatistic" resultType="java.util.Map">
+		select * from (select count(1) num, b.depart_id id ,b.depart_name name from
+		td_f_news a,td_m_depart b ,td_category c where a.depart_id=b.depart_id
+		and (a.catid=c.id or a.typeid=c.id) and c.varName='zwgk' and b.type in (1,2,3)
+		group by b.depart_id,b.depart_name ) d order by d.num desc 
+	</select>
+
+	<select id="cwgkStatistic" resultType="java.util.Map">
+		select * from (select count(1) num, b.depart_id id ,b.depart_name name from
+		td_f_news a,td_m_depart b ,td_category c where a.depart_id=b.depart_id
+		and (a.catid=c.id or a.typeid=c.id) and c.varName='cwgk' and b.type in (1,2,3)
+		group by b.depart_id,b.depart_name ) d order by d.num desc limit 10
+	</select>
+	
+	<select id="cunwgkStatistic" resultType="java.util.Map">
+		select * from (select count(1) num, b.depart_id id ,b.depart_name name from
+		td_f_news a,td_m_depart b ,td_category c where a.depart_id=b.depart_id
+		and (a.catid=c.id or a.typeid=c.id) and (c.varName='cunwgk' or c.varName='caiwgk') and b.type =3
+		group by b.depart_id,b.depart_name ) d order by d.num desc limit 10
+	</select>
+	<select id="pagingCunwgkStatistic" resultType="java.util.Map">
+		select * from (select count(1) num, b.depart_id id ,b.depart_name name from
+		td_f_news a,td_m_depart b ,td_category c where a.depart_id=b.depart_id
+		and (a.catid=c.id or a.typeid=c.id) and (c.varName='cunwgk' or c.varName='caiwgk') and b.type =3
+		group by b.depart_id,b.depart_name ) d order by d.num desc 
+	</select>
+	
+	<select id="getdepartProhectDetail"  resultType="java.util.Map" parameterType="java.lang.String">
+	  select * from td_f_project where depart_id=#{_parameter}
+	</select>
+	<!-- 获取某个部门项目总金额 -->
+	<select id="getProjectSumByTowmId" resultType="java.util.Map"
+		parameterType="java.lang.String">
+		select sum(a.amount) sum,b.depart_id id,b.depart_name name from td_f_project a,td_m_depart b
+		where
+		a.depart_id=b.depart_id and 
+		b.parent_depart_id=#{_parameter}
+		group by b.depart_id,b.depart_name
+	</select>
+
+<!-- 获取某个部门项目总金额 -->
+	<select id="getProjectCountByTowmId" resultType="java.util.Map"
+		parameterType="java.lang.String">
+		select count(1) count,b.depart_id id,b.depart_name name from td_f_project a,td_m_depart b
+		where
+		a.depart_id=b.depart_id and 
+		b.parent_depart_id=#{_parameter}
+		group by b.depart_id,b.depart_name
+	</select>
+	
+	<select id="getdepartFundDetail"  resultType="java.util.Map" parameterType="java.lang.String">
+	  select * from td_f_funds where depart_id=#{_parameter}
+	</select>
+	
+	<!-- 获取某个部门项目总金额 -->
+	<select id="getFundsSumByTowmId" resultType="java.util.Map"
+		parameterType="java.lang.String">
+		select ROUND(sum(a.amount)/10000,4) sum,b.depart_id id,b.depart_name name from td_f_funds a,td_m_depart b
+		where
+		a.depart_id=b.depart_id and 
+		b.parent_depart_id=#{_parameter}
+		group by b.depart_id,b.depart_name
+	</select>
+	<select id="checkuserId"  resultType="java.lang.Integer" parameterType="java.lang.String">
+	  select count(1) from td_m_staff where staff_id=#{_parameter}
+	</select>
+
+
+</mapper>

@@ -1,0 +1,21 @@
+.article-body a {
+	color: #2f63ba;
+}
+
+.newslist a {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.row {
+	margin-right: -.9375rem;
+	margin-left: -.9375rem;
+}
+
+.projectList {
+	font-weight: bolder;
+	font-size: 15px;
+	line-height: 32px;
+}

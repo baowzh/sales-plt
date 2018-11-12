@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xunno.sales.modules.news.repository.NewsRepository">
+	<resultMap id="newsMap" type="com.xunno.sales.modules.news.model.News">
+		<result column="id" property="id"  />
+		<result column="catid" property="catId"  />
+		<result column="typeid" property="typeId"  />
+		<result column="title" property="title"  />
+		<result column="keyword" property="keyword"  />
+		<result column="description" property="description"  />
+		<result column="url" property="url"  />
+		<result column="thumb" property="thumb" />
+		<result column="username" property="username" />
+		<result column="inputtime" property="inputtime"  />
+		<result column="updatetime" property="updatetime"  />
+		<result column="depart_id" property="departId"  />
+		<result column="depart_name" property="departName"  />
+        <result column="subcat" property="subcat"  />
+        <result column="catName" property="catName"  />
+        <result column="staffName" property="staffName"  />
+        <result column="is_top" property="isTop"  />
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="com.xunno.sales.modules.news.model.News" keyProperty="id" useGeneratedKeys="true">
+
+		Insert into
+		td_f_news
+		(
+          catid ,
+          typeid,
+          title ,
+          thumb ,
+          keywords,
+          description,
+          url,
+          username,
+          inputtime,
+          updatetime,
+          depart_id
+		)
+		values (
+          #{catId,jdbcType=INTEGER} ,
+          #{typeId,jdbcType=INTEGER},
+          #{title,jdbcType=VARCHAR} ,
+          #{thumb,jdbcType=VARCHAR} ,
+          #{keywords,jdbcType=VARCHAR},
+          #{description,jdbcType=VARCHAR},
+          #{url,jdbcType=VARCHAR},
+          #{username,jdbcType=VARCHAR},
+          #{inputtime,jdbcType=DATE},
+          #{updatetime,jdbcType=DATE},
+          #{departId,jdbcType=VARCHAR}
+		
+		)
+
+	</insert>
+	<insert id="insertList" parameterType="com.xunno.sales.modules.news.model.News" >
+     Insert into
+		td_f_news
+		(
+          catid ,
+          typeid,
+          title ,
+          thumb ,
+          keywords,
+          description,
+          url,
+          username,
+          inputtime,
+          updatetime,
+          depart_id
+		)
+    VALUES
+    <foreach collection="news" item="model" separator=","> 
+        (           
+            #{model.catId,jdbcType=INTEGER} ,
+          #{model.typeId,jdbcType=INTEGER},
+          #{model.title,jdbcType=VARCHAR} ,
+          #{model.thumb,jdbcType=VARCHAR} ,
+          #{model.keywords,jdbcType=VARCHAR},
+          #{model.description,jdbcType=VARCHAR},
+          #{model.url,jdbcType=VARCHAR},
+          #{model.username,jdbcType=VARCHAR},
+          #{model.inputtime,jdbcType=DATE},
+          #{model.updatetime,jdbcType=DATE},
+          #{model.departId,jdbcType=VARCHAR}    
+        )
+    </foreach>
+</insert>
+	<update id="update" parameterType="com.xunno.sales.modules.news.model.News">
+	 update td_f_news 
+	 set id=#{id}
+	   <if test="catId!=null">
+	    ,catid=#{catId}
+	   </if>
+	   <if test="typeId!=null">
+	    ,typeid=#{typeId}
+	   </if>
+	   <if test="title!=null and title!=''">
+	    ,title=#{title}
+	   </if>
+	   <if test="keywords!=null and keywords!=''">
+	    ,keywords=#{keywords}
+	   </if>
+	   
+	   <if test="description!=null and description!=''">
+	    ,description=#{description}
+	   </if>
+	    <if test="updatetime!=null ">
+	    ,updatetime=#{updatetime}
+	   </if>
+	    <if test="thumb!=null and thumb!=''">
+	    ,thumb=#{thumb}
+	   </if>
+	   
+	  where id=#{id}
+	</update>
+	<delete id="del"  parameterType="java.lang.Integer">
+	 delete from td_f_news where id=#{id}
+	</delete>
+	<select id="paging" parameterType="com.xunno.sales.form.NewsPagingForm" resultMap="newsMap">
+	   select a.*,(select name from  td_category d where d.id=a.typeid ) as subcat,
+	  
+	  (select staff_name from td_m_staff where staff_id=a.username) as staffName
+	  ,b.name as catName,c.depart_name from td_f_news a,td_category b,td_m_depart c
+	  where a.catId=b.id and a.depart_id=c.depart_id  and a.depart_id=#{departId}
+	 
+	   <if test="title!=null and title!=''">
+	    and a.title like  CONCAT('%',#{title},'%') 
+	   </if>
+	   <if test="keyword!=null and keyword!=''">
+	    and a.keyword like  CONCAT('%', #{keyword},'%')  
+	   </if>
+	   <if test="description!=null and description!=''">
+	    and  a.description like CONCAT('%', #{description},'%')    
+	   </if>
+	   <if test="startDate!=null">
+	     and  <![CDATA[ a.inputtime >=#{startDate }  ]]>
+	   </if>
+	    <if test="endDate!=null">
+	     and  <![CDATA[ a.inputtime <=#{endDate }  ]]>
+	   </if>
+	   <if test="catId!=null">
+	     and ( a.catId=#{catId} or a.typeid=#{catId} )
+	   </if>
+	   
+	   order by a.inputtime desc
+	  
+	</select>
+	<select id="get" parameterType="java.lang.Integer" resultMap="newsMap">
+	  select * from td_f_news where id=#{id}
+	</select>
+	<select id="getDepartNewsCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+	  select count(1) from td_f_news where depart_id=#{_parameter}
+	</select>
+	<select id="topNewsByChannel" parameterType="java.util.Map" resultMap="newsMap">
+	  select * from td_f_news where depart_id=#{departId} and (catid=#{cannelId} or typeid=#{cannelId}) order by inputtime desc limit #{count}
+	</select>
+	<update id="updateTop"  parameterType="java.util.Map">
+	  update td_f_news set is_top=#{top} where id=#{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,91 @@
+<#import "gridlib.html" as grid>
+
+<table id="dg${gridMeta.id}"<#if gridMeta.gridCss??>
+	style="${gridMeta.gridCss}" </#if> > <@grid.toolbar meta=gridMeta />
+
+
+</table>
+<script type="text/javascript">
+ // 表格全局脚本 
+ <#if gridMeta.extScript??>
+    ${gridMeta.extScript}
+ </#if>
+
+<@grid.columnContextMenu meta=gridMeta />
+var dg${gridMeta.id};
+ reportGridIds.push({id:'dg${gridMeta.id}',type:'grid'});
+dg${gridMeta.id}= $('#dg${gridMeta.id}').datagrid({
+    url:'',
+    <#if gridMeta.hasToolbar>
+    toolbar:"#tb",
+    </#if>
+    loadMsg : '数据加载中...',
+    sortOrder : 'asc',
+    singleSelect : true,
+    fit : false,
+    width:'100%',
+    height:${gridMeta.height},
+    showFooter : true,
+    openAnimation:'slide',
+    columns: [
+              <@grid.gridheader heads=gridMeta.heads />
+    
+ ]
+ <#if gridMeta.frozenheads??&&gridMeta.frozenheads?size gt 0>
+ ,
+ frozenColumns: [
+                 <@grid.gridheader heads=gridMeta.frozenheads />
+     
+ ]
+ </#if>
+ ,autoRowHeight:true
+ ,striped:true
+ ,rownumbers:true
+  <#if gridMeta.paging=true>
+  ,pagination:${gridMeta.paging?c} 
+  ,pageSize:10
+  ,pageList:[10,30,50,70,100],
+  remoteFilter:false
+  </#if>
+ ,
+  onHeaderContextMenu:handleColumnMenu_${gridMeta.id},
+  onLoadError:function(data){
+    BDialog.alert(data.responseText)
+  }
+  ,loadFilter:function(data){
+  var newData={rows:data.models,total:data.totalrowcount}
+   return newData;
+ },
+  
+ onLoadSuccess : function(data) {
+	  $("#dg${gridMeta.id}").datagrid("clearSelections");
+	}
+});
+
+$(function(){	
+ var param=parseQueryString(window.location.href);
+ if(document.forms.length==0){
+    $('#dg${gridMeta.id}').datagrid({
+	        url:'${gridMeta.dataSrc}',
+			queryParams: param,
+			pageNumber:1
+		});
+ }
+
+});
+function parseQueryString(url) {
+ var reg_url = /^[^\?]+\?([\w\W]+)$/,
+  reg_para = /([^&=]+)=([\w\W]*?)(&|$|#)/g,
+  arr_url = reg_url.exec(url),
+  ret = {};
+ if (arr_url && arr_url[1]) {
+  var str_para = arr_url[1], result;
+  while ((result = reg_para.exec(str_para)) != null) {
+   ret[result[1]] = result[2];
+  }
+ }
+ return ret;
+}
+<@grid.formatter />
+  
+</script>

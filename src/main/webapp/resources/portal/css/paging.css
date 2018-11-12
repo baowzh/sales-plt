@@ -1,0 +1,40 @@
+.pagination {
+	clear: both;
+	color: #323232;
+	padding: 10px;
+	float: right;
+	position: absolute;
+	left:150px;
+	bottom:20px;
+	font-family: "Microsoft YaHei", "SimSun", "STHeiti Light", Arial;
+    font-size: 14px;
+}
+
+.pagination a, .pagination a:link, .pagination a:visited {
+	padding: 2px 5px;
+	margin: 2px;
+	border: 1px solid #b5b5b5;
+	text-decoration: none;
+	color: #006699;
+}
+
+.pagination a:hover, .pagination a:active {
+	background: #fff;
+	text-decoration: none;
+}
+
+.pagination span.current {
+	padding: 2px 5px;
+	margin: 2px;
+	border: 1px solid #b5b5b5;
+	font-weight: bold;
+	background-color: #fdfdfd;
+	box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.2) inset;
+}
+
+.pagination span.disabled {
+	padding: 2px 5px;
+	margin: 2px;
+	border: 1px solid #eee;
+	color: #ddd;
+}

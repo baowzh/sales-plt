@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="roleFuncright">
+	<resultMap id="roleFuncrightMap"
+		type="com.xunno.sales.modules.system.model.RoleFuncright">
+		<result column="ROLE_CODE" property="roleCode" jdbcType="CHAR" />
+		<result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+		<result column="RIGHT_CODE" property="rightCode" jdbcType="VARCHAR" />
+		<result column="RIGHT_NAME" property="rightname" jdbcType="VARCHAR" />
+		<result column="EXTEND_VALUE1" property="extendValue1"
+			jdbcType="VARCHAR" />
+		<result column="EXTEND_VALUE2" property="extendValue2"
+			jdbcType="DECIMAL" />
+		<result column="RSVALUE1" property="rsvalue1" jdbcType="VARCHAR" />
+		<result column="RSVALUE2" property="rsvalue2" jdbcType="VARCHAR" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+		<result column="UPDATE_STAFF_ID" property="updateStaffId"
+			jdbcType="CHAR" />
+		<result column="UPDATE_DEPART_ID" property="updateDepartId"
+			jdbcType="CHAR" />
+
+	</resultMap>
+	<select id="oneRoleFuncright" parameterType="java.lang.String"
+		resultMap="roleFuncrightMap">
+		select * from TF_M_ROLEFUNCRIGHT f where f.ROLE_CODE =
+		#{roleCode} and f.RIGHT_CODE = #{rightCode}
+	</select>
+	<select id="getRoleFuncrights" parameterType="java.util.Map"
+		resultMap="roleFuncrightMap">
+		select t.*
+		<if
+			test="(roleCode != null and roleCode !='')||(rightCode != null and rightCode !='')">
+			,f.RIGHT_NAME ,r.ROLE_NAME
+		</if>
+
+		from TF_M_ROLEFUNCRIGHT t
+
+		<if
+			test="(roleCode != null and roleCode !='')||(rightCode != null and rightCode !='')">
+
+			,TD_M_FUNCRIGHT F ,TD_M_ROLE r
+		</if>
+		<where>
+			<if
+				test="(roleCode != null and roleCode !='')||(rightCode != null and rightCode !='')">
+
+				AND t.RIGHT_CODE =
+				f.RIGHT_CODE and
+				t.ROLE_CODE = r.ROLE_CODE
+			</if>
+			<if test="roleCode != null and roleCode !=''">
+				and t.ROLE_CODE=#{roleCode}
+			</if>
+			<if test="rightCode != null and rightCode !=''">
+				and t.RIGHT_CODE=#{rightCode}
+			</if>
+		</where>
+
+	</select>
+	<insert id="insertRoleFuncright"
+		parameterType="com.xunno.sales.modules.system.model.RoleFuncright">
+
+		Insert into
+		TF_M_ROLEFUNCRIGHT
+		(ROLE_CODE,RIGHT_CODE,EXTEND_VALUE1,EXTEND_VALUE2,RSVALUE1,RSVALUE2,UPDATE_TIME,UPDATE_STAFF_ID,UPDATE_DEPART_ID)
+		values (
+		#{roleCode,jdbcType=CHAR},
+		#{rightCode,jdbcType=VARCHAR},
+		#{extendValue1,jdbcType=VARCHAR},
+		#{extendValue2,jdbcType=DECIMAL},
+		#{rsvalue1,jdbcType=VARCHAR},
+		#{rsvalue2,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=DATE},
+		#{updateStaffId,jdbcType=CHAR},
+		#{updateDepartId,jdbcType=CHAR})
+
+	</insert>
+	<update id="updateRoleFuncright"
+		parameterType="com.xunno.sales.modules.system.model.RoleFuncright">
+
+		update
+		TF_M_ROLEFUNCRIGHT set
+		EXTEND_VALUE1=
+		#{extendValue1,jdbcType=VARCHAR},
+		EXTEND_VALUE2=
+		#{extendValue2,jdbcType=DECIMAL},
+		RSVALUE1=
+		#{rsvalue1,jdbcType=VARCHAR},
+		RSVALUE2= #{rsvalue2,jdbcType=VARCHAR},
+		UPDATE_TIME =
+		#{updateTime,jdbcType=DATE},
+		UPDATE_STAFF_ID =
+		#{updateStaffId,jdbcType=CHAR},
+		UPDATE_DEPART_ID =
+		#{updateDepartId,jdbcType=CHAR}
+		where ROLE_CODE = #{roleCode} and
+		RIGHT_CODE = #{rightCode}
+
+	</update>
+	<delete id="delRoleFuncright"
+		parameterType="java.util.HashMap">
+
+		DELETE FROM
+		TF_M_ROLEFUNCRIGHT t
+		<where>
+			<if test="roleCode != null and roleCode !=''">
+				and t.ROLE_CODE=#{roleCode}
+			</if>
+			<if test="rightCode != null and rightCode !=''">
+				and t.RIGHT_CODE=#{rightCode}
+			</if>
+		</where>
+
+	</delete>
+</mapper>
